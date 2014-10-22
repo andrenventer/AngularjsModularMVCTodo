@@ -1,0 +1,6 @@
+# ide folder and files
+.idea/
+
+# libs folders and files
+bower_components/
+test/node_modules
