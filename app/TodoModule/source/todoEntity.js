@@ -11,7 +11,7 @@ angular.module('todomvc')
             },
 	        markAll: function markAll(completed) {
 		        var todos = todoStorage.get();
-
+		        console.log('markall');
 		        todos.forEach(function (todo) {
 			        todo.completed = !completed;
 		        });

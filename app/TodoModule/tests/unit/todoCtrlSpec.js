@@ -11,6 +11,14 @@
             },
             save: function (value) {
                 this.storage = value;
+            },
+	        markAll: function (completed) {
+		        var todos = this.storage;
+		        todos.forEach(function (todo) {
+			        todo.completed = !completed;
+		        });
+		        this.storage = todos;
+		        return this.storage;
             }
         };
 
@@ -176,7 +184,7 @@
             });
 
             it('markAll() should mark all Todos completed', function () {
-                scope.markAll();
+                scope.markAll(false);
                 scope.$digest();
                 expect(scope.completedCount).toBe(5);
             });
