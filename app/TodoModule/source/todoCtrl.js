@@ -47,9 +47,7 @@ angular.module('todomvc')
         // prime candidates for DDD entity
 
         $scope.markAll = function (completed) {
-            todos.forEach(function (todo) {
-                todo.completed = !completed;
-            });
+	        $scope.todos = todoEntity.markAll(completed);
         };
 
         $scope.removeTodo = function (todo) {

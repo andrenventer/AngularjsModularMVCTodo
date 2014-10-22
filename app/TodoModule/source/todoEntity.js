@@ -8,7 +8,18 @@ angular.module('todomvc')
             },
             load: function load() {
                 return todoStorage.get();
-            }
+            },
+	        markAll: function markAll(completed) {
+		        var todos = todoStorage.get();
+
+		        todos.forEach(function (todo) {
+			        todo.completed = !completed;
+		        });
+
+		        todoStorage.put(todos);
+
+		        return todoStorage.get();
+	        }
         }
 
     });
