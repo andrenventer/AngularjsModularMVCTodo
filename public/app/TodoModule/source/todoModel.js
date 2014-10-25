@@ -3,16 +3,16 @@ angular.module('todomvc')
     .service('todoModel', function () {
         'use strict';
 
-        function transformTitles (posts) {
-            for (var i = 0; i < posts.length; i++){
-                posts[i].title = "==> " + posts[i].title;
+        function transformTitles (todos) {
+            for (var i = 0; i < todos.length; i++){
+                todos[i].title = "==> " + todos[i].title;
             }
-            return posts;
+            return todos;
         }
 
         return{
-            applyDomainRules: function(posts){
-                transformTitles(posts);
+            applyDomainRules: function(todos){
+                transformTitles(todos);
             }
         }
 

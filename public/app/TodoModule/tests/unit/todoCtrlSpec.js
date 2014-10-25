@@ -28,8 +28,8 @@
         beforeEach(inject(function ($controller, $rootScope, $httpBackend) {
             scope = $rootScope.$new();
             ctrl = $controller('TodoCtrl', { $scope: scope });
-            $httpBackend.when('GET', 'http://localhost:3000/posts').respond(postsFromRestAPI);
-            $httpBackend.when('GET', 'http://localhost:3000/posts/3').respond(postFromRestAPI);
+            $httpBackend.when('GET', 'http://localhost:3000/todos').respond(postsFromRestAPI);
+            $httpBackend.when('GET', 'http://localhost:3000/todos/3').respond(postFromRestAPI);
         }));
 
         it('should not have an edited Todo on start', function () {

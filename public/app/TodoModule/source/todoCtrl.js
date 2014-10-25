@@ -2,15 +2,15 @@ angular.module('todomvc')
     .controller('TodoCtrl', function TodoCtrl($scope, $routeParams, $filter, todoEntity, todoREST, todoModel) {
         'use strict';
 
-        todoREST.getAll().then(function(posts) {
-            todoModel.applyDomainRules(posts.data);
-            $scope.todosFromRest = posts.data;
+        todoREST.getAll().then(function(todos) {
+            todoModel.applyDomainRules(todos.data);
+            $scope.todosFromRest = todos.data;
             console.log($scope.todosFromRest);
         });
 
         var id = 3;
-        todoREST.getOne(id).then(function(apost) {
-            $scope.todo3FromRest = apost.data;
+        todoREST.getOne(id).then(function(todo) {
+            $scope.todo3FromRest = todo.data;
         });
 
         var todos = $scope.todos = todoEntity.load();

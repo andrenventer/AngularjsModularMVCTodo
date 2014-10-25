@@ -6,11 +6,11 @@ angular.module('todomvc')
         return{
 
             getAll: function(){
-                return $http.get('http://localhost:3000/posts');
+                return $http.get('http://localhost:3000/todos');
             },
 
             getOne: function(id){
-                return $http.get('http://localhost:3000/posts/' + id);
+                return $http.get('http://localhost:3000/todos/' + id);
             }
 
         }

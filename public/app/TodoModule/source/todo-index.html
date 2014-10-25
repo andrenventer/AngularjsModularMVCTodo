@@ -3,17 +3,17 @@
     <link rel="stylesheet" href="app/TodoModule/assets/todo.css">
 </head>
 
-<section id="postsDemo">
+<section id="TodosDemo">
     <header id="headerP">
-        <h1>posts</h1>
+        <h1>todos REST</h1>
     </header>
     <section id="mainP" ng-show="todosFromRest.length" ng-cloak>
-        <h1>{{todo3FromRest.id}}</h1><h1>{{todo3FromRest.title}}</h1><h1>{{todo3FromRest.body}}</h1>
         <ul id="posts-list">
-            <li ng-repeat="post in todosFromRest">
-                {{post.title}}
+            <li ng-repeat="todo in todosFromRest">
+                <span>{{todo.id}}</span> | <span>{{todo.title}}</span> | <span>{{todo.completed}}</span>
             </li>
         </ul>
+        <span>{{todo3FromRest.id}}</span> -- <span>{{todo3FromRest.title}}</span> -- <span>{{todo3FromRest.completed}}</span>
     </section>
 </section>
 
