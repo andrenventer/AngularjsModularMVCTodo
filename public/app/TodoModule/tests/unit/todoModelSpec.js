@@ -14,17 +14,41 @@
 
         it('should be able to apply Domain Rules to posts', function () {
 
-            var result = [{
-                id: 3,
-                title: "==> Mouse, turning to Alice. 'What IS the fun?' said Alice..",
-                body: "Exactly as we were. My notion was that you couldn't cut off a bit of the doors of the door and."
-            }];
+            var result = [
+                {
+                    id: 1,
+                    title: "==> One",
+                    completed: false
+                },
+                {
+                    id: 2,
+                    title: "==> Two <==",
+                    completed: true
+                },
+                {
+                    id: 3,
+                    title: "==> Three",
+                    completed: false
+                }
+            ];
 
-            var input = [{
-                id: 3,
-                title: "Mouse, turning to Alice. 'What IS the fun?' said Alice..",
-                body: "Exactly as we were. My notion was that you couldn't cut off a bit of the doors of the door and."
-            }];
+            var input = [
+                {
+                    id: 1,
+                    title: "One",
+                    completed: false
+                },
+                {
+                    id: 2,
+                    title: "Two",
+                    completed: true
+                },
+                {
+                    id: 3,
+                    title: "Three",
+                    completed: false
+                }
+            ];
 
             model.applyDomainRules(input);
 
