@@ -10,7 +10,7 @@ server.low.db = {
         {
             id: 2,
             title: "Two",
-            completed: false
+            completed: true
         },
         {
             id: 3,

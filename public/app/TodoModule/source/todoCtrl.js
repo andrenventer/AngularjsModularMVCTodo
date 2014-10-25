@@ -5,12 +5,6 @@ angular.module('todomvc')
         todoREST.getAll().then(function(todos) {
             todoModel.applyDomainRules(todos.data);
             $scope.todosFromRest = todos.data;
-            console.log($scope.todosFromRest);
-        });
-
-        var id = 3;
-        todoREST.getOne(id).then(function(todo) {
-            $scope.todo3FromRest = todo.data;
         });
 
         var todos = $scope.todos = todoEntity.load();
