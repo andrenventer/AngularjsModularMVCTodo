@@ -8,6 +8,7 @@ angular.module('todomvc')
 
         var remainingCount = 0;
         var completedCount = 0;
+        var allChecked = !remainingCount;
 
         function loadTodo() {
             todos = todoEntity.load();
@@ -26,9 +27,41 @@ angular.module('todomvc')
                 completed: false
             });
 
-            todoEntity.save( todo );
+            todoEntity.save( todos );
+        }
 
-            newTodo = '';
+        function calculateRemainingTodos() {
+            for( var i = 0; i < todos.length; i++ ) {
+                if( todos[i].completed === false)
+                    remainingCount++;
+            }
+
+            return remainingCount;
+        }
+
+        function calculateCompletedTodos() {
+            completedCount = todos.length - remainingCount;
+
+            return completedCount;
+        }
+
+        function removeTodo( todo ) {
+            todos.splice(todos.indexOf(todo), 1);
+            todoEntity.save( todos );
+        }
+
+        function markAll( completed ) {
+            todos.forEach( function ( todo ) {
+                todo.completed = !completed;
+            });
+
+            todoEntity.save( todos );
+        }
+
+        function clearCompletedTodos() {
+            todos = todos.filter(function (val) {
+                return !val.completed;
+            });
         }
 
         function transformTitles (todos) {
@@ -40,11 +73,11 @@ angular.module('todomvc')
 
         return{
 
+            todos: todos,
             newTodo: newTodo,
-            remainingCount: remainingCount,
-            completedCount: completedCount,
-
-
+            remainingCount: function() { return calculateRemainingTodos() },
+            completedCount: function() { return calculateCompletedTodos() },
+            allChecked: allChecked,
 
             loadTodos: function() {
                 return loadTodo();
@@ -52,6 +85,18 @@ angular.module('todomvc')
 
             addTodos: function( newTodo ) {
                 addToDo( newTodo );
+            },
+
+            removeTodo: function( todo ) {
+                removeTodo( todo );
+            },
+
+            markAll: function( completed ) {
+                markAll( completed );
+            },
+
+            clearCompletedTodos: function() {
+                clearCompletedTodos();
             },
 
             applyDomainRules: function(todos){

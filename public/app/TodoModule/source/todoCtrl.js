@@ -13,44 +13,39 @@ angular.module('todomvc')
 //            $scope.todo3FromRest = todo.data;
 //        });
 
-        var todos = $scope.todos = todoModel.loadTodos();
-
-        console.log('var: ');
-        console.log(todos);
-        console.log('scope: ');
-        console.log($scope.todos);
+        var modelTodos = $scope.todos = todoModel.loadTodos();
 
         $scope.newTodo = '';
 
         $scope.addTodo = function() {
             todoModel.addTodos( $scope.newTodo );
+            $scope.newTodo = '';
         };
 
-//        $scope.addTodo = function () {
-//
-//            console.log('called');
-//
-//            var newTodo = $scope.newTodo.trim();
-//            if (!newTodo.length) {
-//                return;
-//            }
-//
-//            todos.push({
-//                title: newTodo,
-//                completed: false
-//            });
-//
-//            $scope.newTodo = '';
-//        };
+        $scope.removeTodo = function ( todo ) {
+            todoModel.removeTodo( todo );
+        };
 
-//        $scope.$watch('todos', function (newValue, oldValue) {
-//            $scope.remainingCount = $filter('filter')($scope.todos, { completed: false }).length;
-//            $scope.completedCount = todos.length - $scope.remainingCount;
-//            $scope.allChecked = !$scope.remainingCount;
-//            if (newValue !== oldValue) { // This prevents unneeded calls to the local storage
-//                todoEntity.save(todos);
-//            }
-//        }, true);
+        $scope.markAll = function ( completed ) {
+            todoModel.markAll( completed );
+        };
+
+        $scope.clearCompletedTodos = function () {
+            todoModel.clearCompletedTodos();
+        };
+
+        // ---------------- STILL NEEDS EDITING ---------------- //
+
+        $scope.$watch( 'modelTodos', function ( newValue, oldValue ) {
+            $scope.remainingCount = todoModel.remainingCount();
+            $scope.completedCount = todoModel.completedCount();
+            $scope.allChecked = todoModel.allChecked;
+
+            // This prevents unneeded calls to the local storage
+            if ( newValue !== oldValue ) {
+                todoModel.addTodos( $scope.newTodo );
+            }
+        }, true);
 
         $scope.editTodo = function (todo) {
             $scope.editedTodo = todo;
@@ -59,7 +54,6 @@ angular.module('todomvc')
         };
 
         // Monitor the current route for changes and adjust the filter accordingly.
-
         $scope.$on('$routeChangeSuccess', function () {
             var status = $scope.status = $routeParams.status || '';
 
@@ -71,8 +65,6 @@ angular.module('todomvc')
         // live edit and undo features
 
         $scope.editedTodo = null;
-
-
 
         $scope.doneEditing = function (todo) {
             $scope.editedTodo = null;
@@ -88,24 +80,6 @@ angular.module('todomvc')
         $scope.revertEditing = function (todo) {
             todos[todos.indexOf(todo)] = $scope.originalTodo;
             $scope.doneEditing($scope.originalTodo);
-        };
-
-        // prime candidates for DDD entity
-
-        $scope.markAll = function (completed) {
-            todos.forEach(function (todo) {
-                todo.completed = !completed;
-            });
-        };
-
-        $scope.removeTodo = function (todo) {
-            todos.splice(todos.indexOf(todo), 1);
-        };
-
-        $scope.clearCompletedTodos = function () {
-            $scope.todos = todos = todos.filter(function (val) {
-                return !val.completed;
-            });
         };
 
     });
