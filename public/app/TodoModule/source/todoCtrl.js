@@ -82,9 +82,7 @@ angular.module('todomvc')
         };
 
         $scope.clearCompletedTodos = function () {
-            $scope.todos = todoModel.todos = todoModel.todos.filter(function (val) {
-                return !val.completed;
-            });
+            $scope.todos = todoModel.clearCompletedTodos();
         };
 
     });

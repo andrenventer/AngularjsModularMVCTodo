@@ -16,11 +16,21 @@ angular.module('todomvc')
             return todos;
         }
 
+        function clearCompletedTodos () {
+            todos = this.todos.filter(function (val) {
+                return !val.completed;
+            });
+        };
+
         return{
+
             todos: todos,
+
             applyDomainRules: function(todos){
                 transformTitles(todos);
-            }
+            },
+
+            clearCompletedTodos: clearCompletedTodos
         }
 
     });
