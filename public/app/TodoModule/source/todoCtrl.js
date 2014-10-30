@@ -7,7 +7,7 @@ angular.module('todomvc')
             $scope.todosFromRest = todos.data;
         });
 
-        var model_todos = $scope.todos = todoEntity.load();
+        todoModel.todos = $scope.todos = todoEntity.load();
         $scope.newTodo = '';
 
         // Monitor the current route for changes and adjust the filter accordingly.
@@ -25,11 +25,11 @@ angular.module('todomvc')
         $scope.editedTodo = null;
 
         $scope.$watch('todos', function (newValue, oldValue) {
-            $scope.remainingCount = $filter('filter')(model_todos, { completed: false }).length;
-            $scope.completedCount = model_todos.length - $scope.remainingCount;
+            $scope.remainingCount = $filter('filter')(todoModel.todos, { completed: false }).length;
+            $scope.completedCount = todoModel.todos.length - $scope.remainingCount;
             $scope.allChecked = !$scope.remainingCount;
             if (newValue !== oldValue) { // This prevents unneeded calls to the local storage
-                todoEntity.save(model_todos);
+                todoEntity.save(todoModel.todos);
             }
         }, true);
 
@@ -45,20 +45,20 @@ angular.module('todomvc')
         // undo features could also be in the DDD entity
 
         $scope.revertEditing = function (todo) {
-            model_todos[model_todos.indexOf(todo)] = $scope.originalTodo;
+            todoModel.todos[todoModel.todos.indexOf(todo)] = $scope.originalTodo;
             $scope.doneEditing($scope.originalTodo);
         };
 
         // prime candidates for DDD entity
 
         $scope.markAll = function (completed) {
-            model_todos.forEach(function (todo) {
+            todoModel.todos.forEach(function (todo) {
                 todo.completed = !completed;
             });
         };
 
         $scope.removeTodo = function (todo) {
-            model_todos.splice(model_todos.indexOf(todo), 1);
+            todoModel.todos.splice(todoModel.todos.indexOf(todo), 1);
         };
 
         $scope.addTodo = function () {
@@ -67,7 +67,7 @@ angular.module('todomvc')
                 return;
             }
 
-            model_todos.push({
+            todoModel.todos.push({
                 title: newTodo,
                 completed: false
             });
@@ -82,7 +82,7 @@ angular.module('todomvc')
         };
 
         $scope.clearCompletedTodos = function () {
-            $scope.todos = model_todos = model_todos.filter(function (val) {
+            $scope.todos = todoModel.todos = todoModel.todos.filter(function (val) {
                 return !val.completed;
             });
         };

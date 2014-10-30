@@ -2,6 +2,8 @@ angular.module('todomvc')
     .service('todoModel', function () {
         'use strict';
 
+        var todos;
+
         function transformTitles (todos) {
             for (var i = 0; i < todos.length; i++){
                 if (todos[i].completed === false){
@@ -15,6 +17,7 @@ angular.module('todomvc')
         }
 
         return{
+            todos: todos,
             applyDomainRules: function(todos){
                 transformTitles(todos);
             }
