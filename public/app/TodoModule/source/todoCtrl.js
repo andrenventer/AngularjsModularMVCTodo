@@ -2,19 +2,61 @@ angular.module('todomvc')
     .controller('TodoCtrl', function TodoCtrl($scope, $routeParams, $filter, todoEntity, todoREST, todoModel) {
         'use strict';
 
-        todoREST.getAll().then(function(todos) {
-            todoModel.applyDomainRules(todos.data);
-            $scope.todosFromRest = todos.data;
-            console.log($scope.todosFromRest);
-        });
+//        todoREST.getAll().then(function(todos) {
+//            todoModel.applyDomainRules(todos.data);
+//            $scope.todosFromRest = todos.data;
+//            console.log($scope.todosFromRest);
+//        });
+//
+//        var id = 3;
+//        todoREST.getOne(id).then(function(todo) {
+//            $scope.todo3FromRest = todo.data;
+//        });
 
-        var id = 3;
-        todoREST.getOne(id).then(function(todo) {
-            $scope.todo3FromRest = todo.data;
-        });
+        var todos = $scope.todos = todoModel.loadTodos();
 
-        var todos = $scope.todos = todoEntity.load();
+        console.log('var: ');
+        console.log(todos);
+        console.log('scope: ');
+        console.log($scope.todos);
+
         $scope.newTodo = '';
+
+        $scope.addTodo = function() {
+            todoModel.addTodos( $scope.newTodo );
+        };
+
+//        $scope.addTodo = function () {
+//
+//            console.log('called');
+//
+//            var newTodo = $scope.newTodo.trim();
+//            if (!newTodo.length) {
+//                return;
+//            }
+//
+//            todos.push({
+//                title: newTodo,
+//                completed: false
+//            });
+//
+//            $scope.newTodo = '';
+//        };
+
+//        $scope.$watch('todos', function (newValue, oldValue) {
+//            $scope.remainingCount = $filter('filter')($scope.todos, { completed: false }).length;
+//            $scope.completedCount = todos.length - $scope.remainingCount;
+//            $scope.allChecked = !$scope.remainingCount;
+//            if (newValue !== oldValue) { // This prevents unneeded calls to the local storage
+//                todoEntity.save(todos);
+//            }
+//        }, true);
+
+        $scope.editTodo = function (todo) {
+            $scope.editedTodo = todo;
+            // Clone the original to restore it on demand.
+            $scope.originalTodo = angular.extend({}, todo);
+        };
 
         // Monitor the current route for changes and adjust the filter accordingly.
 
@@ -30,14 +72,7 @@ angular.module('todomvc')
 
         $scope.editedTodo = null;
 
-        $scope.$watch('todos', function (newValue, oldValue) {
-            $scope.remainingCount = $filter('filter')(todos, { completed: false }).length;
-            $scope.completedCount = todos.length - $scope.remainingCount;
-            $scope.allChecked = !$scope.remainingCount;
-            if (newValue !== oldValue) { // This prevents unneeded calls to the local storage
-                todoEntity.save(todos);
-            }
-        }, true);
+
 
         $scope.doneEditing = function (todo) {
             $scope.editedTodo = null;
@@ -65,26 +100,6 @@ angular.module('todomvc')
 
         $scope.removeTodo = function (todo) {
             todos.splice(todos.indexOf(todo), 1);
-        };
-
-        $scope.addTodo = function () {
-            var newTodo = $scope.newTodo.trim();
-            if (!newTodo.length) {
-                return;
-            }
-
-            todos.push({
-                title: newTodo,
-                completed: false
-            });
-
-            $scope.newTodo = '';
-        };
-
-        $scope.editTodo = function (todo) {
-            $scope.editedTodo = todo;
-            // Clone the original to restore it on demand.
-            $scope.originalTodo = angular.extend({}, todo);
         };
 
         $scope.clearCompletedTodos = function () {
