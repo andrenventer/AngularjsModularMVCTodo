@@ -17,6 +17,15 @@
                     title: newTodo,
                     completed: false
                 });
+            },
+            markAllTodos: function(completed){
+                this.todosLoadedFromEntity.forEach(function (todo) {
+                    todo.completed = !completed;
+                });
+            },
+
+            removeTodo: function(todo){
+                this.todosLoadedFromEntity.splice(this.todosLoadedFromEntity.indexOf(todo), 1);
             }
         };
 

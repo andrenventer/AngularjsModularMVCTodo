@@ -20,6 +20,8 @@ angular.module('todomvc')
         $scope.todos = todos;
         $scope.newTodo = '';
         $scope.editedTodo = null;
+//        $scope.editedTodo = todoModel.getEditedTodo();
+//        $scope.originalTodo = todoModel.getOriginalTodo();
 
         // Monitor the current route for changes and adjust the filter accordingly.
 
@@ -44,6 +46,7 @@ angular.module('todomvc')
         }, true);
 
         $scope.doneEditing = function (todo) {
+//            todoModel.doneEditing(todo);
             $scope.editedTodo = null;
             todo.title = todo.title.trim();
 
@@ -69,19 +72,19 @@ angular.module('todomvc')
             $scope.newTodo = '';
         };
 
-        // prime candidates for DDD entity
-
         $scope.markAll = function (completed) {
-            todos.forEach(function (todo) {
-                todo.completed = !completed;
-            });
+            todoModel.markAllTodos(completed);
         };
 
         $scope.removeTodo = function (todo) {
-            todos.splice(todos.indexOf(todo), 1);
+            todoModel.removeTodo(todo);
         };
+        // prime candidates for DDD entity
+
+
 
         $scope.editTodo = function (todo) {
+//            todoModel.editTodo(todo);
             $scope.editedTodo = todo;
             // Clone the original to restore it on demand.
             $scope.originalTodo = angular.extend({}, todo);
