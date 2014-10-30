@@ -13,6 +13,9 @@ module.exports = function (config) {
 			'public/app/**/source/*.js',
 			'public/app/**/test*/unit/*.js'
 		],
+		exclude:[
+			'public/app/**/test*/e2e/*.js'
+		],
 		autoWatch: true,
 		singleRun: false,
 		browsers: ['Chrome']

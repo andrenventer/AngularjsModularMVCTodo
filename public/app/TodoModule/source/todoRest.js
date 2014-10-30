@@ -1,4 +1,3 @@
-
 angular.module('todomvc')
     .service('todoREST', function ($http) {
         'use strict';

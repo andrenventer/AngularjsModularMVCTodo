@@ -1,4 +1,3 @@
-
 angular.module('todomvc')
     .service('todoModel', function () {
         'use strict';
