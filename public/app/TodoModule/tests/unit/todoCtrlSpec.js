@@ -205,7 +205,7 @@
 
             it('clearCompletedTodos() should clear completed Todos', function () {
                 model.clearCompletedTodos();
-                expect(model.todos.length).toBe(5);
+                expect(model.todos.length).toBe(3);
             });
 
             it('markAll() should mark all Todos completed', function () {

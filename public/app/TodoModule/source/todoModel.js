@@ -17,7 +17,7 @@ angular.module('todomvc')
         }
 
         function clearCompletedTodos () {
-            todos = this.todos.filter(function (val) {
+            this.todos = this.todos.filter(function (val) {
                 return !val.completed;
             });
         };
