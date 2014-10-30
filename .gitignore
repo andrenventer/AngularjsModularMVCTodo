@@ -3,5 +3,6 @@
 
 # libs folders and files
 public/bower_components/
+bower_components/
 node_modules
 test/node_modules
