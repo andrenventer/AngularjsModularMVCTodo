@@ -26,8 +26,32 @@
 
             removeTodo: function(todo){
                 this.todosLoadedFromEntity.splice(this.todosLoadedFromEntity.indexOf(todo), 1);
+            },
+
+            clearCompletedTodos: function () {
+                var activeTodos = this.todosLoadedFromEntity.filter(function (val) {
+                    return !val.completed;
+                });
+                this.saveTodos(activeTodos);
+            },
+
+            calculateRemainingCount: function() {
+                var remainingCount = 0;
+                this.todosLoadedFromEntity.forEach(function (todo) {
+                    if (todo.completed === false) {
+                        remainingCount++;
+                    }
+                });
+
+                return remainingCount;
+            },
+
+            calculateCompletedCount: function() {
+                return this.todosLoadedFromEntity.length - this.calculateRemainingCount();
             }
+
         };
+
 
 
         function postsFromRestAPI(){
@@ -198,6 +222,7 @@
 
             it('clearCompletedTodos() should clear completed Todos', function () {
                 scope.clearCompletedTodos();
+                scope.todos = todoModel.loadTodos();
                 expect(scope.todos.length).toBe(3);
             });
 

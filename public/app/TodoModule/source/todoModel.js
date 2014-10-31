@@ -3,8 +3,10 @@ angular.module('todomvc')
         'use strict';
 
         var todos = todoEntity.load();
-        var editedTodo = null;
-        var originalTodo;
+        var remainingCount;
+        var completedCount;
+//        var editedTodo = null;
+//        var originalTodo;
 
         function saveTodos(todos){
             todoEntity.save(todos);
@@ -27,28 +29,44 @@ angular.module('todomvc')
             todos.splice(todos.indexOf(todo), 1);
         }
 
-        function editTodo(todo){
-            editedTodo = todo;
-            // Clone the original to restore it on demand.
-            originalTodo = angular.extend({}, todo);
-        }
+//        function editTodo(todo){
+//            editedTodo = todo;
+//            // Clone the original to restore it on demand.
+//            originalTodo = angular.extend({}, todo);
+//        }
+//
+//        function doneEditing(todo){
+//            editedTodo = null;
+//            todo.title = todo.title.trim();
+//
+//            if (!todo.title) {
+//                $scope.removeTodo(todo);
+//            }
+//
+//            return todos;
+//        }
 
-        function doneEditing(todo){
-            editedTodo = null;
-            todo.title = todo.title.trim();
-
-            if (!todo.title) {
-                $scope.removeTodo(todo);
-            }
-        }
-
-        function clearCompletedTodos(todo){
-            $scope.todos = todos = todos.filter(function (val) {
+        function clearCompletedTodos(){
+            todos = todos.filter(function (val) {
                 return !val.completed;
             });
+            saveTodos(todos);
         }
 
+        function calculateRemainingCount(){
+            remainingCount = 0;
+            todos.forEach(function(todo){
+               if (todo.completed === false){
+                   remainingCount++;
+               }
+            });
+            return remainingCount;
+        }
 
+        function calculateCompletedCount(){
+            completedCount = todos.length - remainingCount;
+            return completedCount;
+        }
 
         function transformTitles (todos) {
             for (var i = 0; i < todos.length; i++){
@@ -63,13 +81,13 @@ angular.module('todomvc')
                 return todos;
             },
 
-            getEditedTodo: function(){
-                return editedTodo;
-            },
-
-            getOriginalTodo: function(){
-                return originalTodo;
-            },
+//            getEditedTodo: function(){
+//                return editedTodo;
+//            },
+//
+//            getOriginalTodo: function(){
+//                return originalTodo;
+//            },
 
             saveTodos: function(todos){
                 saveTodos(todos);
@@ -87,16 +105,24 @@ angular.module('todomvc')
                 removeTodo(todo);
             },
 
-            editTodo: function(todo){
-                editTodo(todo);
-            },
-
-            doneEditing: function(todo){
-                doneEditing(todo);
-            },
+//            editTodo: function(todo){
+//                editTodo(todo);
+//            },
+//
+//            doneEditing: function(todo){
+//                return doneEditing(todo);
+//            },
 
             clearCompletedTodos: function(todo){
                 clearCompletedTodos(todo);
+            },
+
+            calculateRemainingCount: function(){
+                return calculateRemainingCount();
+            },
+
+            calculateCompletedCount: function(){
+                return calculateCompletedCount();
             },
 
             applyDomainRules: function(todos){
@@ -105,57 +131,3 @@ angular.module('todomvc')
         }
 
     });
-
-//define(['angular', '../module'], function (ng) {
-//    'use strict';
-//
-//    ng.module('pet.models')
-//        .service('PetModel', [
-//
-//            // add other Service name here to inject "subModule,"
-//            'OtherModel',
-//
-//            function (OtherModel) {
-//
-//                var accumilator = 0;
-//
-//                var privatePetProp = 'petModel-privatePetProp';
-//
-//                function privatePropFunction(){
-//                    return privatePetProp;
-//                }
-//
-//                function privateFunction(){
-//                    return 'petModel-privatePetFunc';
-//                }
-//
-//                return {
-//
-//                    domainAccumilator: accumilator,
-//
-//                    petProp: 'petModel-petProp',
-//
-//                    otherProp: OtherModel.publicOtherProp,
-//
-//                    publicPetProp: privatePropFunction(),
-//
-//                    petFunc: function () {
-//                        return 'petModel-petFunc';
-//                    },
-//
-//                    publicPetFunc: function(){
-//                        return privateFunction();
-//                    },
-//
-//                    addSomething: function () {
-//                        this.domainAccumilator = this.domainAccumilator + 1;
-//                        return this.domainAccumilator;
-//                    }
-//
-//                };
-//
-//            }
-//
-//        ]);
-//
-//});

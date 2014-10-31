@@ -36,31 +36,14 @@ angular.module('todomvc')
         // live edit and undo features
 
         $scope.$watch('todos', function (newValue, oldValue) {
-            $scope.remainingCount = $filter('filter')(todos, { completed: false }).length;
-            $scope.completedCount = todos.length - $scope.remainingCount;
+            $scope.remainingCount = todoModel.calculateRemainingCount();
+            $scope.completedCount = todoModel.calculateCompletedCount();
             $scope.allChecked = !$scope.remainingCount;
 
             if (newValue !== oldValue) { // This prevents unneeded calls to the local storage
                 todoModel.saveTodos(todos);
             }
         }, true);
-
-        $scope.doneEditing = function (todo) {
-//            todoModel.doneEditing(todo);
-            $scope.editedTodo = null;
-            todo.title = todo.title.trim();
-
-            if (!todo.title) {
-                $scope.removeTodo(todo);
-            }
-        };
-
-        // undo features could also be in the DDD entity
-
-        $scope.revertEditing = function (todo) {
-            todos[todos.indexOf(todo)] = $scope.originalTodo;
-            $scope.doneEditing($scope.originalTodo);
-        };
 
         // moved to DDD entity
 
@@ -79,21 +62,35 @@ angular.module('todomvc')
         $scope.removeTodo = function (todo) {
             todoModel.removeTodo(todo);
         };
+
+        $scope.clearCompletedTodos = function () {
+            todoModel.clearCompletedTodos();
+            // ??????????????????????????????????????????????????????????///
+            todos = $scope.todos = todoModel.loadTodos();
+        };
+
+
         // prime candidates for DDD entity
 
-
-
         $scope.editTodo = function (todo) {
-//            todoModel.editTodo(todo);
             $scope.editedTodo = todo;
             // Clone the original to restore it on demand.
             $scope.originalTodo = angular.extend({}, todo);
         };
 
-        $scope.clearCompletedTodos = function () {
-            $scope.todos = todos = todos.filter(function (val) {
-                return !val.completed;
-            });
+        $scope.doneEditing = function (todo) {
+            $scope.editedTodo = null;
+            todo.title = todo.title.trim();
+    
+            if (!todo.title) {
+                $scope.removeTodo(todo);
+            }
         };
+
+        $scope.revertEditing = function (todo) {
+            todos[todos.indexOf(todo)] = $scope.originalTodo;
+            $scope.doneEditing($scope.originalTodo);
+        };
+
 
     });
