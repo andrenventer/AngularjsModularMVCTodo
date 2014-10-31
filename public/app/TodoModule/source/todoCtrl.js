@@ -1,5 +1,5 @@
 angular.module('todomvc')
-    .controller('TodoCtrl', function TodoCtrl($scope, $routeParams, $filter, todoModel) {
+    .controller('TodoCtrl', function TodoCtrl($scope, $routeParams, todoModel) {
         'use strict';
 
 //        todoREST.getAll().then(function(todosFromModel) {
@@ -62,11 +62,8 @@ angular.module('todomvc')
         };
 
         $scope.clearCompletedTodos = function () {
-            todoModel.clearCompletedTodos();
-            // ??????????????????????????????????????????????????????????///
-            todosFromModel = $scope.todos = todoModel.loadTodos();
+            todosFromModel = $scope.todos = todoModel.clearCompletedTodos();
         };
-
 
         // prime candidates for DDD entity
 

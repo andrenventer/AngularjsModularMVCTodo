@@ -49,6 +49,7 @@ angular.module('todomvc')
                 return !val.completed;
             });
             saveTodos(todos);
+            return todos;
         }
 
         function calculateRemainingCount(){
@@ -112,7 +113,7 @@ angular.module('todomvc')
 //            },
 
             clearCompletedTodos: function(todo){
-                clearCompletedTodos(todo);
+                return clearCompletedTodos(todo);
             },
 
             calculateRemainingCount: function(){
