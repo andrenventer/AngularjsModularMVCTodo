@@ -2,50 +2,40 @@ angular.module('todomvc')
     .controller('TodoCtrl', function TodoCtrl($scope, $routeParams, $filter, todoEntity, todoREST, todoModel) {
         'use strict';
 
-//        todoREST.getAll().then(function(todos) {
-//            todoModel.applyDomainRules(todos.data);
-//            $scope.todosFromRest = todos.data;
-//            console.log($scope.todosFromRest);
-//        });
-//
-//        var id = 3;
-//        todoREST.getOne(id).then(function(todo) {
-//            $scope.todo3FromRest = todo.data;
-//        });
-
-        var modelTodos = $scope.todos = todoModel.loadTodos();
+        $scope.todos = todoModel.loadTodos();
 
         $scope.newTodo = '';
 
         $scope.addTodo = function() {
-            todoModel.addTodos( $scope.newTodo );
+            $scope.todos = todoModel.addTodos( $scope.newTodo );
             $scope.newTodo = '';
         };
 
         $scope.removeTodo = function ( todo ) {
-            todoModel.removeTodo( todo );
+            $scope.todos = todoModel.removeTodo( todo );
         };
 
         $scope.markAll = function ( completed ) {
-            todoModel.markAll( completed );
+            $scope.todos = todoModel.markAll( completed );
         };
 
         $scope.clearCompletedTodos = function () {
-            todoModel.clearCompletedTodos();
+            $scope.todos = todoModel.clearCompletedTodos();
         };
 
-        // ---------------- STILL NEEDS EDITING ---------------- //
+        $scope.$watch( 'todos', function ( newValue, oldValue ) {
 
-        $scope.$watch( 'modelTodos', function ( newValue, oldValue ) {
-            $scope.remainingCount = todoModel.remainingCount();
-            $scope.completedCount = todoModel.completedCount();
-            $scope.allChecked = todoModel.allChecked;
+            $scope.remainingCount = todoModel.getRemainingCount();
+            $scope.completedCount = todoModel.getCompletedCount();
+            $scope.allChecked = todoModel.getAllChecked;
 
             // This prevents unneeded calls to the local storage
             if ( newValue !== oldValue ) {
-                todoModel.addTodos( $scope.newTodo );
+                todoModel.saveTodos( $scope.todos );
             }
         }, true);
+
+        // ---------------- STILL NEEDS EDITING ---------------- //
 
         $scope.editTodo = function (todo) {
             $scope.editedTodo = todo;
@@ -76,7 +66,6 @@ angular.module('todomvc')
         };
 
         // undo features could also be in the DDD entity
-
         $scope.revertEditing = function (todo) {
             todos[todos.indexOf(todo)] = $scope.originalTodo;
             $scope.doneEditing($scope.originalTodo);

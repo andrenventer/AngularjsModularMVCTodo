@@ -4,33 +4,31 @@ angular.module('todomvc')
         'use strict';
 
         var newTodo = '';
-        var todos = [];
+        var todos = todoEntity.load();
 
-        var remainingCount = 0;
+        var remainingCount;
         var completedCount = 0;
-        var allChecked = !remainingCount;
 
-        function loadTodo() {
-            todos = todoEntity.load();
+        function addToDo( todo ) {
+            newTodo = todo.trim();
+
+            if ( newTodo.length ) {
+                todos.push({
+                    title: newTodo,
+                    completed: false
+                });
+            }
 
             return todos;
         }
 
-        function addToDo( todo ) {
-            newTodo = todo.trim();
-            if (!newTodo.length) {
-                return;
-            }
-
-            todos.push({
-                title: newTodo,
-                completed: false
-            });
-
+        function saveTodos( todos ){
             todoEntity.save( todos );
         }
 
         function calculateRemainingTodos() {
+            remainingCount = 0;
+
             for( var i = 0; i < todos.length; i++ ) {
                 if( todos[i].completed === false)
                     remainingCount++;
@@ -45,9 +43,14 @@ angular.module('todomvc')
             return completedCount;
         }
 
+        function getAllChecked() {
+            return !remainingCount;
+        }
+
         function removeTodo( todo ) {
             todos.splice(todos.indexOf(todo), 1);
-            todoEntity.save( todos );
+
+            return todos;
         }
 
         function markAll( completed ) {
@@ -55,13 +58,15 @@ angular.module('todomvc')
                 todo.completed = !completed;
             });
 
-            todoEntity.save( todos );
+            return todos;
         }
 
         function clearCompletedTodos() {
             todos = todos.filter(function (val) {
                 return !val.completed;
             });
+
+            return todos;
         }
 
         function transformTitles (todos) {
@@ -74,29 +79,41 @@ angular.module('todomvc')
         return{
 
             todos: todos,
-            newTodo: newTodo,
-            remainingCount: function() { return calculateRemainingTodos() },
-            completedCount: function() { return calculateCompletedTodos() },
-            allChecked: allChecked,
+
+            getRemainingCount: function() {
+               return calculateRemainingTodos();
+            },
+
+            getCompletedCount: function() {
+                return calculateCompletedTodos();
+            },
+
+            getAllChecked: function() {
+                return getAllChecked();
+            },
 
             loadTodos: function() {
-                return loadTodo();
+                return todos;
             },
 
             addTodos: function( newTodo ) {
-                addToDo( newTodo );
+                return addToDo( newTodo );
+            },
+
+            saveTodos: function( todos ) {
+                saveTodos( todos );
             },
 
             removeTodo: function( todo ) {
-                removeTodo( todo );
+                return removeTodo( todo );
             },
 
             markAll: function( completed ) {
-                markAll( completed );
+                return markAll( completed );
             },
 
             clearCompletedTodos: function() {
-                clearCompletedTodos();
+                return clearCompletedTodos();
             },
 
             applyDomainRules: function(todos){
