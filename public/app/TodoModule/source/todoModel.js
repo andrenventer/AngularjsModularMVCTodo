@@ -5,8 +5,6 @@ angular.module('todomvc')
         var todos = todoEntity.load();
         var remainingCount;
         var completedCount;
-//        var editedTodo = null;
-//        var originalTodo;
 
         function saveTodos(todos){
             todoEntity.save(todos);

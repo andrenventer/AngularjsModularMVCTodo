@@ -2,9 +2,9 @@ angular.module('todomvc')
     .controller('TodoCtrl', function TodoCtrl($scope, $routeParams, $filter, todoModel) {
         'use strict';
 
-//        todoREST.getAll().then(function(todos) {
-//            todoModel.applyDomainRules(todos.data);
-//            $scope.todosFromRest = todos.data;
+//        todoREST.getAll().then(function(todosFromModel) {
+//            todoModel.applyDomainRules(todosFromModel.data);
+//            $scope.todosFromRest = todosFromModel.data;
 //            console.log($scope.todosFromRest);
 //        });
 //
@@ -13,15 +13,13 @@ angular.module('todomvc')
 //            $scope.todo3FromRest = todo.data;
 //        });
 //
-//        var todos = $scope.todos = todoEntity.load();
+//        var todosFromModel = $scope.todosFromModel = todoEntity.load();
 //        $scope.newTodo = '';
 
-        var todos = todoModel.loadTodos();
-        $scope.todos = todos;
+        var todosFromModel = todoModel.loadTodos();
+        $scope.todos = todosFromModel;
         $scope.newTodo = '';
         $scope.editedTodo = null;
-//        $scope.editedTodo = todoModel.getEditedTodo();
-//        $scope.originalTodo = todoModel.getOriginalTodo();
 
         // Monitor the current route for changes and adjust the filter accordingly.
 
@@ -41,7 +39,7 @@ angular.module('todomvc')
             $scope.allChecked = !$scope.remainingCount;
 
             if (newValue !== oldValue) { // This prevents unneeded calls to the local storage
-                todoModel.saveTodos(todos);
+                todoModel.saveTodos(todosFromModel);
             }
         }, true);
 
@@ -66,7 +64,7 @@ angular.module('todomvc')
         $scope.clearCompletedTodos = function () {
             todoModel.clearCompletedTodos();
             // ??????????????????????????????????????????????????????????///
-            todos = $scope.todos = todoModel.loadTodos();
+            todosFromModel = $scope.todos = todoModel.loadTodos();
         };
 
 
@@ -81,14 +79,14 @@ angular.module('todomvc')
         $scope.doneEditing = function (todo) {
             $scope.editedTodo = null;
             todo.title = todo.title.trim();
-    
+
             if (!todo.title) {
                 $scope.removeTodo(todo);
             }
         };
 
         $scope.revertEditing = function (todo) {
-            todos[todos.indexOf(todo)] = $scope.originalTodo;
+            todosFromModel[todosFromModel.indexOf(todo)] = $scope.originalTodo;
             $scope.doneEditing($scope.originalTodo);
         };
 
