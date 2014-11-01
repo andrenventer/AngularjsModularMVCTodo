@@ -20,7 +20,8 @@ angular.module('todomvc')
             this.todos = this.todos.filter(function (val) {
                 return !val.completed;
             });
-        };
+            return this.todos;
+        }
 
         return{
 
