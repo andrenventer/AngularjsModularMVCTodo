@@ -45,14 +45,11 @@
         // Load the module containing the app, only 'ng' is loaded by default.
         beforeEach(module('todomvc'));
 
-        var model;
-
-        beforeEach(inject(function ($controller, $rootScope, $httpBackend, todoModel) {
+        beforeEach(inject(function ($controller, $rootScope, $httpBackend) {
             scope = $rootScope.$new();
             ctrl = $controller('TodoCtrl', { $scope: scope });
             $httpBackend.when('GET', 'http://localhost:3000/todos').respond(postsFromRestAPI);
             $httpBackend.when('GET', 'http://localhost:3000/todos/3').respond(postFromRestAPI);
-            model = todoModel;
         }));
 
         it('should not have an edited Todo on start', function () {
@@ -201,11 +198,6 @@
 
                 scope.doneEditing(todo);
                 expect(scope.todos[0].title).toBe('buy moar unicorns');
-            });
-
-            it('clearCompletedTodos() should clear completed Todos', function () {
-                model.clearCompletedTodos();
-                expect(model.todos.length).toBe(3);
             });
 
             it('markAll() should mark all Todos completed', function () {

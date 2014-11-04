@@ -1,5 +1,5 @@
 angular.module('todomvc')
-    .service('todoModel', function () {
+    .service('todoModel',['$rootScope', function ($rootScope) {
         'use strict';
 
         var todos;
@@ -20,6 +20,7 @@ angular.module('todomvc')
             this.todos = this.todos.filter(function (val) {
                 return !val.completed;
             });
+            $rootScope.$broadcast('todoModel::clearCompletedTodosEvent');
             return this.todos;
         }
 
@@ -34,4 +35,4 @@ angular.module('todomvc')
             clearCompletedTodos: clearCompletedTodos
         }
 
-    });
+    }]);
