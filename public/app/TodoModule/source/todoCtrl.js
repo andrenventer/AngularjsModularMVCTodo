@@ -2,13 +2,9 @@ angular.module('todomvc')
     .controller('TodoCtrl', function TodoCtrl($scope, $routeParams, $filter, todoEntity, todoREST, todoModel) {
         'use strict';
 
-        $scope.$on('todoModel::clearCompletedTodosEvent', function(event) {
+        $scope.$on('todoModel::gotTodosFromRestEvent', function(event) {
             alert("I am an event and my name is: "+event.name);
-        });
-
-        todoREST.getAll().then(function(todos) {
-            todoModel.applyDomainRules(todos.data);
-            $scope.todosFromRest = todos.data;
+            $scope.todosFromRest = todoModel.todos;
         });
 
         todoModel.todos = $scope.todos = todoEntity.load();

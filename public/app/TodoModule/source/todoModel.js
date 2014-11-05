@@ -1,5 +1,5 @@
 angular.module('todomvc')
-    .service('todoModel',['$rootScope', function ($rootScope) {
+    .service('todoModel',['$rootScope', 'todoREST', function ($rootScope, todoREST) {
         'use strict';
 
         var todos;
@@ -20,17 +20,22 @@ angular.module('todomvc')
             this.todos = this.todos.filter(function (val) {
                 return !val.completed;
             });
-            $rootScope.$broadcast('todoModel::clearCompletedTodosEvent');
             return this.todos;
         }
+
+        function getAllTodos(){
+            todoREST.getAll().then(function(result) {
+                $rootScope.$broadcast('todoModel::gotTodosFromRestEvent');
+                transformTitles(result.data);
+                todos =  result.data;
+            });
+        }
+
+        getAllTodos();
 
         return{
 
             todos: todos,
-
-            applyDomainRules: function(todos){
-                transformTitles(todos);
-            },
 
             clearCompletedTodos: clearCompletedTodos
         }
