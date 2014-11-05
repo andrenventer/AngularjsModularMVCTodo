@@ -37,6 +37,10 @@ angular.module('todomvc')
 
             todos: todos,
 
+            applyDomainRules: function(todos){
+                transformTitles(todos)
+            },
+
             clearCompletedTodos: clearCompletedTodos
         }
 
