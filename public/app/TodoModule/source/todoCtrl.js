@@ -3,7 +3,6 @@ angular.module('todomvc')
         'use strict';
 
         $scope.$on('todoModel::gotTodosFromRestEvent', function(event) {
-            alert("I am an event and my name is: "+event.name);
             $scope.todosFromRest = todoModel.todos;
         });
 
