@@ -2,7 +2,7 @@ angular.module('todomvc')
     .factory('indexedDBDataService', ['$window', '$q', function ($window, $q) {
         var indexedDB = $window.indexedDB;
         var db = null;
-        var lastIndex = 0;
+        var lastIndex = -1;
 
         var open = function () {
             var deferred = $q.defer();
