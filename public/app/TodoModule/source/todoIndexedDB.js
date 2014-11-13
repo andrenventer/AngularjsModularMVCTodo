@@ -108,7 +108,7 @@ angular.module('todomvc')
                 var store = trans.objectStore("todo");
                 lastIndex++;
                 var request = store.put(
-
+                    {id: lastIndex, title: todoText}
                 );
 
                 request.onsuccess = function (e) {

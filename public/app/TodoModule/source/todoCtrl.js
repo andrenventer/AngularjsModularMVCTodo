@@ -2,8 +2,20 @@ angular.module('todomvc')
     .controller('TodoCtrl', function TodoCtrl($scope, $routeParams, $filter, todoEntity, todoREST, todoModel) {
         'use strict';
 
+        $scope.persistTodos = function() {
+            todoModel.persistTodos();
+        };
+
+        $scope.refresh = function(){
+            console.log(todoModel.todosFromRest);
+            console.log(todoModel.todosFromIndexedDB);
+        };
+
         $scope.$on('todoModel::gotTodosFromRestEvent', function(event) {
-            $scope.todosFromRest = todoModel.todos;
+            $scope.todosFromRest = todoModel.todosFromRest;
+        });
+        $scope.$on('todoModel::gotTodosFromIndexedDB', function(event) {
+            $scope.todosFromIndexedDB = todoModel.todosFromIndexedDB;
         });
 
         todoModel.todos = $scope.todos = todoEntity.load();

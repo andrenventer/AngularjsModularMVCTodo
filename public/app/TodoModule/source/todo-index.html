@@ -10,7 +10,7 @@
             <input id="new-todo" placeholder="What needs to be done?" ng-model="newTodo" autofocus>
         </form>
     </header>
-    <section id="main" ng-show="todos.length" ng-cloak>
+    <section id="main">
         <input id="toggle-all" type="checkbox" ng-model="allChecked" ng-click="markAll(allChecked)">
         <label for="toggle-all">Mark all as complete</label>
         <ul id="todo-list">
@@ -39,6 +39,12 @@
             </li>
             <li>
                 <a ng-class="{selected: status == 'completed'}" href="#/completed">Completed</a>
+            </li>
+            <li>
+                <a ng-class="{}" href="#" ng-click="persistTodos()">Persist</a>
+            </li>
+            <li>
+                <a ng-class="{}" href="#" ng-click="refresh()">Refresh</a>
             </li>
         </ul>
         <button id="clear-completed" ng-click="clearCompletedTodos()" ng-show="completedCount">Clear completed ({{completedCount}})</button>
