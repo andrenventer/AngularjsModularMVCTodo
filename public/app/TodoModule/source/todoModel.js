@@ -7,9 +7,7 @@ angular.module('todomvc')
         // Load Todos
         function loadAllTodos() {
             todos = todoEntity.load();
-            $rootScope.$broadcast('todoModel::loadAllTodos');
-        };
-        loadAllTodos();
+        }
 
         function saveAllTodos( todosFromController ) {
             todoEntity.save( todosFromController );
@@ -20,13 +18,13 @@ angular.module('todomvc')
             todos.forEach(function ( todo ) {
                 todo.completed = !status;
             });
-        };
+        }
 
         // Remove Todo
         function removeTodo( todo ) {
             todos.splice( todos.indexOf( todo ), 1 );
             todoEntity.save( todos );
-        };
+        }
 
         // Add Todo
         function addTodo( todo ) {
@@ -42,18 +40,25 @@ angular.module('todomvc')
             });
 
             todoEntity.save( todos );
-        };
+        }
 
         // Clear completed Todos
         function clearCompletedTodos() {
             todos = todos.filter(function (val) {
                 return !val.completed;
             });
-        };
+            todoEntity.save( todos );
+        }
 
         // Return
         return{
-            todos: todos,
+            getTodos: function() {
+                return todos;
+            },
+            setTodos: function( todosFromController ) {
+                todos = todosFromController;
+            },
+            loadAllTodos: loadAllTodos,
             saveAllTodos: function( todosFromController ) {
                 saveAllTodos( todosFromController );
             },

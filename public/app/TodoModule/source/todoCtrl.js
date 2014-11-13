@@ -1,14 +1,14 @@
 angular.module('todomvc')
-    .controller('TodoCtrl', function TodoCtrl($scope, $routeParams, $filter, todoModel) {
+    .controller('TodoCtrl', function TodoCtrl($scope, $rootScope, $routeParams, $filter, todoModel) {
         'use strict';
 
         $scope.newTodo = '';
         $scope.editedTodo = null;
 
         // Load Todos once model loaded them
-        $scope.$on('todoModel::loadAllTodos', function() {
-            $scope.todos = todoModel.todos;
-        });
+        todoModel.loadAllTodos();
+
+        $scope.todos = todoModel.getTodos();
 
         // Monitor the current route for changes and adjust the filter accordingly.
         $scope.$on('$routeChangeSuccess', function () {
@@ -21,11 +21,11 @@ angular.module('todomvc')
 
         // Live edit and undo features
         $scope.$watch('todos', function (newValue, oldValue) {
-            $scope.remainingCount = $filter('filter')(todoModel.todos, { completed: false }).length;
-            $scope.completedCount = todoModel.todos.length - $scope.remainingCount;
+            $scope.remainingCount = $filter('filter')($scope.todos, { completed: false }).length;
+            $scope.completedCount = $scope.todos.length - $scope.remainingCount;
             $scope.allChecked = !$scope.remainingCount;
             if (newValue !== oldValue) { // This prevents unneeded calls to the local storage
-                todoModel.save( todoModel.todos );
+                todoModel.saveAllTodos( $scope.todos );
             }
         }, true);
 
@@ -46,13 +46,20 @@ angular.module('todomvc')
         };
 
         // Mark all Todos
-        $scope.markAll = todoModel.markAll( $scope.allChecked );
+        $scope.markAll = function() {
+            todoModel.markAll( $scope.allChecked );
+        }
 
         // Remove Todo
-        $scope.removeTodo = todoModel.removeTodo( $scope.todo );
+        $scope.removeTodo = function() {
+            todoModel.removeTodo( $scope.todo );
+        }
 
         // Add Todo
-        $scope.addTodo = todoModel.addTodo( $scope.newTodo );
+        $scope.addTodo = function() {
+            todoModel.addTodo( $scope.newTodo );
+            $scope.newTodo = '';
+        }
 
         // Edit Todo
         $scope.editTodo = function ( todo ) {
@@ -63,7 +70,8 @@ angular.module('todomvc')
 
         // Clear completed Todos
         $scope.clearCompletedTodos = function () {
-            todoModel.todos = todoModel.clearCompletedTodos();
+            todoModel.clearCompletedTodos();
+            $scope.todos = todoModel.getTodos();
         };
 
     });
