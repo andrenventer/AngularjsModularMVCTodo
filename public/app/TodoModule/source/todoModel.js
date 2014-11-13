@@ -1,6 +1,8 @@
 angular.module('todomvc')
-    .service('todoModel', function () {
+    .service('todoModel', ['todoEntity', function ( todoEntity ) {
         'use strict';
+
+        var todos = [];
 
         function transformTitles (todos) {
             for (var i = 0; i < todos.length; i++){
@@ -14,10 +16,25 @@ angular.module('todomvc')
             return todos;
         }
 
+        // Revert
+        function revertEditing( todo ) {
+
+        }
+
         return{
-            applyDomainRules: function(todos){
-                transformTitles(todos);
+
+            loadAllTodos: function(){
+                todos = todoEntity.load();
+                return todos;
+            },
+            revertEditing: function( todo ) {
+                todos[todos.indexOf( todo )] = $scope.originalTodo;
+                //$scope.doneEditing( $scope.originalTodo );
+                return todos;
+            },
+            applyDomainRules: function( todos ){
+                transformTitles( todos );
             }
         }
 
-    });
+    }]);
