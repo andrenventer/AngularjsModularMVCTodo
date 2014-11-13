@@ -7,8 +7,8 @@ angular.module('todomvc')
         };
 
         $scope.refresh = function(){
-            console.log(todoModel.todosFromRest);
-            console.log(todoModel.todosFromIndexedDB);
+            console.log(todoModel.getTodosFromRest());
+            console.log(todoModel.getTodosFromIndexedDB());
         };
 
         $scope.$on('todoModel::gotTodosFromRestEvent', function(event) {

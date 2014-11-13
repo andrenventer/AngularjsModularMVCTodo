@@ -3,6 +3,8 @@ angular.module('todomvc')
         'use strict';
 
         var todos;
+        var todosFromRest;
+        var todosFromIndexedDB;
 
         function transformTitles(todos) {
             for (var i = 0; i < todos.length; i++) {
@@ -23,19 +25,19 @@ angular.module('todomvc')
             return this.todos;
         }
 
-        var todosFromRest = [];
 
         function getAllTodosFromRest() {
             todoREST.getAll().then(function (result) {
-                transformTitles(result.data);
                 todosFromRest = result.data;
                 $rootScope.$broadcast('todoModel::gotTodosFromRestEvent');
             });
         }
 
-        getAllTodosFromRest();
+        function getTodosFromRest() {
+            return todosFromRest;
+        }
 
-        var todosFromIndexedDB = [];
+        getAllTodosFromRest();
 
         function refreshList() {
             indexedDBDataService.getTodos().then(function (data) {
@@ -45,6 +47,10 @@ angular.module('todomvc')
                 console.log(err);
             });
         };
+
+        function getTodosFromIndexedDB() {
+            return todosFromIndexedDB;
+        }
 
         function addTodo(todoText) {
             indexedDBDataService.addTodo(todoText).then(function () {
@@ -71,7 +77,7 @@ angular.module('todomvc')
         indexedDB();
 
         function persistTodos() {
-            for(var i = 0; i < todosFromRest.length; i++){
+            for (var i = 0; i < todosFromRest.length; i++) {
                 addTodo(todosFromRest[i].title)
             }
         }
@@ -80,9 +86,9 @@ angular.module('todomvc')
 
             todos: todos,
 
-            todosFromRest: todosFromRest,
+            getTodosFromRest: getTodosFromRest,
 
-            todosFromIndexedDB: todosFromIndexedDB,
+            getTodosFromIndexedDB: getTodosFromIndexedDB,
 
             applyDomainRules: function (todos) {
                 transformTitles(todos)
