@@ -1,18 +1,16 @@
 angular.module('todomvc')
-    .controller('TodoCtrl', function TodoCtrl($scope, $routeParams, $filter, todoEntity, todoREST, todoModel) {
+    .controller('TodoCtrl', function TodoCtrl($scope, $routeParams, $filter, todoModel) {
         'use strict';
 
-        var todos = todoModel.loadAllTodos();
-//        todoREST.getAll().then(function(todos) {
-//            todoModel.applyDomainRules(todos.data);
-//            $scope.todosFromRest = todos.data;
-//        });
-
-        var model_todos = $scope.todos = todoEntity.load();
         $scope.newTodo = '';
+        $scope.editedTodo = null;
+
+        // Load Todos once model loaded them
+        $scope.$on('todoModel::loadAllTodos', function() {
+            $scope.todos = todoModel.todos;
+        });
 
         // Monitor the current route for changes and adjust the filter accordingly.
-
         $scope.$on('$routeChangeSuccess', function () {
             var status = $scope.status = $routeParams.status || '';
 
@@ -21,77 +19,51 @@ angular.module('todomvc')
             { completed: true } : null;
         });
 
-        // live edit and undo features
-
-        $scope.editedTodo = null;
-
+        // Live edit and undo features
         $scope.$watch('todos', function (newValue, oldValue) {
-            $scope.remainingCount = $filter('filter')(model_todos, { completed: false }).length;
-            $scope.completedCount = model_todos.length - $scope.remainingCount;
+            $scope.remainingCount = $filter('filter')(todoModel.todos, { completed: false }).length;
+            $scope.completedCount = todoModel.todos.length - $scope.remainingCount;
             $scope.allChecked = !$scope.remainingCount;
             if (newValue !== oldValue) { // This prevents unneeded calls to the local storage
-                todoEntity.save(model_todos);
+                todoModel.save( todoModel.todos );
             }
         }, true);
 
-        $scope.doneEditing = function (todo) {
+        // Done editing
+        $scope.doneEditing = function ( todo ) {
             $scope.editedTodo = null;
             todo.title = todo.title.trim();
 
-            if (!todo.title) {
-                $scope.removeTodo(todo);
+            if ( !todo.title ) {
+                $scope.removeTodo( todo );
             }
         };
 
-        // undo features could also be in the DDD entity
+        // Undo features could also be in the DDD entity
+        $scope.revertEditing = function ( todo ) {
+            todoModel.todos[ todoModel.todos.indexOf( todo ) ] = $scope.originalTodo;
+            $scope.doneEditing( $scope.originalTodo );
+        };
 
-        $scope.revertEditing = todoModel.revertEditing( $scope.todo );
-//        $scope.revertEditing = function (todo) {
-//            model_todos[model_todos.indexOf(todo)] = $scope.originalTodo;
-//            $scope.doneEditing($scope.originalTodo);
-//        };
-
-        // prime candidates for DDD entity
-
+        // Mark all Todos
         $scope.markAll = todoModel.markAll( $scope.allChecked );
-//        $scope.markAll = function (completed) {
-//            model_todos.forEach(function (todo) {
-//                todo.completed = !completed;
-//            });
-//        };
 
-        $scope.removeTodo = todoModel.removeTodo( todo );
-//        $scope.removeTodo = function (todo) {
-//            model_todos.splice(model_todos.indexOf(todo), 1);
-//        };
+        // Remove Todo
+        $scope.removeTodo = todoModel.removeTodo( $scope.todo );
 
-        $scope.addTodo = todoModel.addTodo();
-//        $scope.addTodo = function () {
-//            var newTodo = $scope.newTodo.trim();
-//            if (!newTodo.length) {
-//                return;
-//            }
-//
-//            model_todos.push({
-//                title: newTodo,
-//                completed: false
-//            });
-//
-//            $scope.newTodo = '';
-//        };
+        // Add Todo
+        $scope.addTodo = todoModel.addTodo( $scope.newTodo );
 
-        $scope.editTodo = todoModel.editTodo( todo );
-//        $scope.editTodo = function (todo) {
-//            $scope.editedTodo = todo;
-//            // Clone the original to restore it on demand.
-//            $scope.originalTodo = angular.extend({}, todo);
-//        };
+        // Edit Todo
+        $scope.editTodo = function ( todo ) {
+            $scope.editedTodo = todo;
+            // Clone the original to restore it on demand.
+            $scope.originalTodo = angular.extend({}, todo);
+        };
 
-        $scope.clearCompletedTodos = todoModel.clearCompletedTodos();
-//        $scope.clearCompletedTodos = function () {
-//            $scope.todos = model_todos = model_todos.filter(function (val) {
-//                return !val.completed;
-//            });
-//        };
+        // Clear completed Todos
+        $scope.clearCompletedTodos = function () {
+            todoModel.todos = todoModel.clearCompletedTodos();
+        };
 
     });

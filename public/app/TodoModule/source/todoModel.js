@@ -1,40 +1,66 @@
 angular.module('todomvc')
-    .service('todoModel', ['todoEntity', function ( todoEntity ) {
+    .service('todoModel', ['$rootScope', 'todoEntity', function ( $rootScope, todoEntity ) {
         'use strict';
 
         var todos = [];
 
-        function transformTitles (todos) {
-            for (var i = 0; i < todos.length; i++){
-                if (todos[i].completed === false){
-                    todos[i].title = "==> " + todos[i].title;
-                }else if(todos[i].completed === true){
-                    todos[i].title = "==> " + todos[i].title + " <==";
-                }
+        // Load Todos
+        function loadAllTodos() {
+            todos = todoEntity.load();
+            $rootScope.$broadcast('todoModel::loadAllTodos');
+        };
+        loadAllTodos();
 
+        function saveAllTodos( todosFromController ) {
+            todoEntity.save( todosFromController );
+        }
+
+        // Mark all Todos
+        function markAll( status ) {
+            todos.forEach(function ( todo ) {
+                todo.completed = !status;
+            });
+        };
+
+        // Remove Todo
+        function removeTodo( todo ) {
+            todos.splice( todos.indexOf( todo ), 1 );
+            todoEntity.save( todos );
+        };
+
+        // Add Todo
+        function addTodo( todo ) {
+            todo = todo.trim();
+
+            if (!todo.length) {
+                return;
             }
-            return todos;
-        }
 
-        // Revert
-        function revertEditing( todo ) {
+            todos.push({
+                title: todo,
+                completed: false
+            });
 
-        }
+            todoEntity.save( todos );
+        };
 
+        // Clear completed Todos
+        function clearCompletedTodos() {
+            todos = todos.filter(function (val) {
+                return !val.completed;
+            });
+        };
+
+        // Return
         return{
-
-            loadAllTodos: function(){
-                todos = todoEntity.load();
-                return todos;
+            todos: todos,
+            saveAllTodos: function( todosFromController ) {
+                saveAllTodos( todosFromController );
             },
-            revertEditing: function( todo ) {
-                todos[todos.indexOf( todo )] = $scope.originalTodo;
-                //$scope.doneEditing( $scope.originalTodo );
-                return todos;
-            },
-            applyDomainRules: function( todos ){
-                transformTitles( todos );
-            }
+            markAll: markAll,
+            removeTodo: removeTodo,
+            addTodo: addTodo,
+            clearCompletedTodos: clearCompletedTodos
         }
 
     }]);
