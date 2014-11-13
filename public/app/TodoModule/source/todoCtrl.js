@@ -12,10 +12,10 @@ angular.module('todomvc')
         };
 
         $scope.$on('todoModel::gotTodosFromRestEvent', function(event) {
-            $scope.todosFromRest = todoModel.todosFromRest;
+            $scope.todosFromRest = todoModel.getTodosFromRest();
         });
         $scope.$on('todoModel::gotTodosFromIndexedDB', function(event) {
-            $scope.todosFromIndexedDB = todoModel.todosFromIndexedDB;
+            $scope.todosFromIndexedDB = todoModel.getTodosFromIndexedDB();
         });
 
         todoModel.todos = $scope.todos = todoEntity.load();
