@@ -97,7 +97,7 @@ angular.module('todomvc')
             return deferred.promise;
         };
 
-        var addTodo = function (todoText) {
+        var addTodo = function (todo) {
             var deferred = $q.defer();
 
             if (db === null) {
@@ -108,7 +108,7 @@ angular.module('todomvc')
                 var store = trans.objectStore("todo");
                 lastIndex++;
                 var request = store.put(
-                    {id: lastIndex, title: todoText}
+                    {id: lastIndex, todo: todo}
                 );
 
                 request.onsuccess = function (e) {

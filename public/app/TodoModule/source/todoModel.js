@@ -52,8 +52,8 @@ angular.module('todomvc')
             return todosFromIndexedDB;
         }
 
-        function addTodo(todoText) {
-            indexedDBDataService.addTodo(todoText).then(function () {
+        function addTodo(todo) {
+            indexedDBDataService.addTodo(todo).then(function () {
                 refreshList();
             }, function (err) {
                 console.log(err);
@@ -78,7 +78,7 @@ angular.module('todomvc')
 
         function persistTodos() {
             for (var i = 0; i < todosFromRest.length; i++) {
-                addTodo(todosFromRest[i].title)
+                addTodo(todosFromRest[i])
             }
         }
 

@@ -16,16 +16,6 @@ server.low.db = {
             id: 2,
             title: "Two",
             completed: false
-        },
-        {
-            id: 3,
-            title: "Three",
-            completed: true
-        },
-        {
-            id: 4,
-            title: "Four",
-            completed: true
         }
     ]
 };
