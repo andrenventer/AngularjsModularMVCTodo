@@ -12,4 +12,6 @@ webdriver-manager start
 To run the test suite, run these commands:
 
     npm run unit
-    protractor ./config/protractor.conf.js
+
+    webdriver-manager start
+    npm run e2e

@@ -7,7 +7,8 @@
     "karma": "~0.10.0"
   },
   "scripts": {
-    "unit": "karma start config/karma.conf.js"
+    "unit": "karma start config/karma.conf.js",
+    "e2e": "protractor config/protractor.conf.js"
   },
   "dependencies": {}
 }
