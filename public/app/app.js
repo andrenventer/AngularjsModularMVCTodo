@@ -5,4 +5,4 @@
  *
  * @type {angular.Module}
  */
-angular.module('app', ['todomvc'])
+angular.module('app', ['ngResource','todomvc']);

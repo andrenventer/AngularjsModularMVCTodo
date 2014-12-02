@@ -1,5 +1,5 @@
 angular.module('todomvc')
-    .controller('TodoCtrl', function TodoCtrl($scope, $routeParams, $filter, todoEntity, todoREST, todoModel) {
+    .controller('TodoCtrl', function TodoCtrl($scope, $routeParams, $filter, todoEntity, todoREST, todoModel, todoCollection) {
         'use strict';
 
         $scope.persistTodos = function() {
@@ -9,11 +9,18 @@ angular.module('todomvc')
         $scope.refresh = function(){
             console.log(todoModel.getTodosFromRest());
             console.log(todoModel.getTodosFromIndexedDB());
+            var todo = todoCollection.get({ id: 1 }, function() {
+                console.log(todo);
+            });
+            var todos = todoCollection.query(function() {
+                console.log(todos);
+            });
         };
 
         $scope.$on('todoModel::gotTodosFromRestEvent', function(event) {
             $scope.todosFromRest = todoModel.getTodosFromRest();
         });
+
         $scope.$on('todoModel::gotTodosFromIndexedDB', function(event) {
             $scope.todosFromIndexedDB = todoModel.getTodosFromIndexedDB();
         });
