@@ -4,17 +4,22 @@ server.low.db = {
     "todos": [
         {
             id: 0,
-            title: "Zero",
+            title: "Eat",
             completed: false
         },
         {
             id: 1,
-            title: "One",
-            completed: true
+            title: "Sleep",
+            completed: false
         },
         {
             id: 2,
-            title: "Two",
+            title: "Rave",
+            completed: false
+        },
+        {
+            id: 3,
+            title: "Repeat",
             completed: false
         }
     ]
