@@ -1,10 +1,13 @@
 
 angular.module('todomvc')
-    .service('todoModel', function ( todoEntity ) {
+    .service('todoModel', function ( todoCollection ) {
         'use strict';
 
         var newTodo = '';
-        var todos = todoEntity.load();
+//        var todos = todoEntity.load();
+//        var todos = todoCollection.get();
+        var todos = todoCollection.query(function() {});
+
 
         var remainingCount;
         var completedCount = 0;
@@ -17,13 +20,17 @@ angular.module('todomvc')
                     title: newTodo,
                     completed: false
                 });
+
+                var newTodo = { "title": todo};
+
+                todoCollection.save( newTodo );
             }
 
             return todos;
         }
 
         function saveTodos( todos ){
-            todoEntity.save( todos );
+            todoCollection.save( todos );
         }
 
         function calculateRemainingTodos() {
@@ -50,7 +57,13 @@ angular.module('todomvc')
         function removeTodo( todo ) {
             todos.splice(todos.indexOf(todo), 1);
 
+            todoCollection.delete( todo );
+
             return todos;
+        }
+
+        function updateTodo( todo ) {
+            todoCollection.update( todo );
         }
 
         function markAll( completed ) {
@@ -98,6 +111,16 @@ angular.module('todomvc')
 
             addTodos: function( newTodo ) {
                 return addToDo( newTodo );
+            },
+
+            updateTodo: function( todo ) {
+                updateTodo( todo );
+            },
+
+            updateAllTodos: function( todos ) {
+                for(var i = 0; i < todos.length; i++) {
+                    updateTodo( todos[i] );
+                }
             },
 
             saveTodos: function( todos ) {

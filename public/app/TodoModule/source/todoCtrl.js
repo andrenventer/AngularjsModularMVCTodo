@@ -31,7 +31,8 @@ angular.module('todomvc')
 
             // This prevents unneeded calls to the local storage
             if ( newValue !== oldValue ) {
-                todoModel.saveTodos( $scope.todos );
+//                todoModel.saveTodos( $scope.todos );
+                //todoModel.updateAllTodos( newValue );
             }
         }, true);
 
@@ -62,6 +63,9 @@ angular.module('todomvc')
 
             if (!todo.title) {
                 $scope.removeTodo(todo);
+            }
+            else {
+                todoModel.updateTodo( todo );
             }
         };
 
