@@ -1,102 +1,68 @@
 angular.module('todomvc')
-    .service('todoModel', ['$rootScope', 'todoREST', 'indexedDBDataService', function ($rootScope, todoREST, indexedDBDataService) {
+    .service('todoModel', function (todoCollection) {
         'use strict';
 
-        var todos;
-        var todosFromRest;
-        var todosFromIndexedDB;
+        var todos = todoCollection.query();
 
-        function transformTitles(todos) {
-            for (var i = 0; i < todos.length; i++) {
-                if (todos[i].completed === false) {
-                    todos[i].title = "==> " + todos[i].title;
-                } else if (todos[i].completed === true) {
-                    todos[i].title = "==> " + todos[i].title + " <==";
-                }
+        function addTodo(title) {
 
+            if (!title.length) {
+                return;
             }
-            return todos;
+
+            title = title.trim();
+
+            var todoToAdd = {
+                "id": null,
+                "title": title,
+                "completed": false
+            };
+
+            todoCollection.save(todoToAdd);
+
+            // Add to state object
+            todos.push({
+                title: title,
+                completed: false
+            });
+        }
+
+        function updateTodo(todo) {
+            var todoToUpdate = {
+                "id": todo.id,
+                "title": todo.title,
+                "completed": todo.completed
+            };
+            todoCollection.update(todoToUpdate);
+        }
+
+        function deleteTodo(todo) {
+            var todoToDelete = {
+                "id": todo.id
+            };
+            todoCollection.delete(todoToDelete);
+
+            // Remove from state object
+            todos.splice(todos.indexOf(todo), 1);
         }
 
         function clearCompletedTodos() {
             this.todos = this.todos.filter(function (val) {
+
+                if(val.completed)
+                    todoCollection.delete(val);
+
                 return !val.completed;
             });
             return this.todos;
         }
 
-
-        function getAllTodosFromRest() {
-            todoREST.getAll().then(function (result) {
-                todosFromRest = result.data;
-                $rootScope.$broadcast('todoModel::gotTodosFromRestEvent');
-            });
-        }
-
-        function getTodosFromRest() {
-            return todosFromRest;
-        }
-
-        getAllTodosFromRest();
-
-        function refreshList() {
-            indexedDBDataService.getTodos().then(function (data) {
-                todosFromIndexedDB = data;
-                $rootScope.$broadcast('todoModel::gotTodosFromIndexedDB');
-            }, function (err) {
-                console.log(err);
-            });
-        };
-
-        function getTodosFromIndexedDB() {
-            return todosFromIndexedDB;
-        }
-
-        function addTodo(todo) {
-            indexedDBDataService.addTodo(todo).then(function () {
-                refreshList();
-            }, function (err) {
-                console.log(err);
-            });
-        };
-
-        function deleteTodo(id) {
-            indexedDBDataService.deleteTodo(id).then(function () {
-                refreshList();
-            }, function (err) {
-                console.log(err);
-            });
-        };
-
-        function indexedDB() {
-            indexedDBDataService.open().then(function () {
-                refreshList();
-            });
-        }
-
-        indexedDB();
-
-        function persistTodos() {
-            for (var i = 0; i < todosFromRest.length; i++) {
-                addTodo(todosFromRest[i])
-            }
-        }
-
         return {
-
             todos: todos,
-
-            getTodosFromRest: getTodosFromRest,
-
-            getTodosFromIndexedDB: getTodosFromIndexedDB,
-
-            applyDomainRules: function (todos) {
-                transformTitles(todos)
-            },
-
-            clearCompletedTodos: clearCompletedTodos,
-
-            persistTodos: persistTodos
+            addTodo: addTodo,
+            updateTodo: updateTodo,
+            deleteTodo: deleteTodo,
+            clearCompletedTodos: clearCompletedTodos
         }
 
-    }]);
+    });

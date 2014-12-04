@@ -16,7 +16,7 @@
         <ul id="todo-list">
             <li ng-repeat="todo in todos | filter:statusFilter track by $index" ng-class="{completed: todo.completed, editing: todo == editedTodo}">
                 <div class="view">
-                    <input class="toggle" type="checkbox" ng-model="todo.completed">
+                    <input class="toggle" type="checkbox" ng-click="toggleTodoStatus(todo)" ng-model="todo.completed">
                     <label ng-dblclick="editTodo(todo)">{{todo.title}}</label>
                     <button class="destroy" ng-click="removeTodo(todo)"></button>
                 </div>
@@ -39,12 +39,6 @@
             </li>
             <li>
                 <a ng-class="{selected: status == 'completed'}" href="#/completed">Completed</a>
-            </li>
-            <li>
-                <a ng-class="{}" href="#" ng-click="persistTodos()">Persist</a>
-            </li>
-            <li>
-                <a ng-class="{}" href="#" ng-click="refresh()">Refresh</a>
             </li>
         </ul>
         <button id="clear-completed" ng-click="clearCompletedTodos()" ng-show="completedCount">Clear completed ({{completedCount}})</button>

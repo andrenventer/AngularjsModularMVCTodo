@@ -1,28 +1,11 @@
 angular.module('todomvc')
-    .controller('TodoCtrl', function TodoCtrl($scope, $routeParams, $filter, todoEntity, todoREST, todoModel) {
+    .controller('TodoCtrl', function TodoCtrl($scope, $routeParams, $filter, todoModel) {
         'use strict';
 
-        $scope.persistTodos = function() {
-            todoModel.persistTodos();
-        };
-
-        $scope.refresh = function(){
-            console.log(todoModel.getTodosFromRest());
-            console.log(todoModel.getTodosFromIndexedDB());
-        };
-
-        $scope.$on('todoModel::gotTodosFromRestEvent', function(event) {
-            $scope.todosFromRest = todoModel.getTodosFromRest();
-        });
-        $scope.$on('todoModel::gotTodosFromIndexedDB', function(event) {
-            $scope.todosFromIndexedDB = todoModel.getTodosFromIndexedDB();
-        });
-
-        todoModel.todos = $scope.todos = todoEntity.load();
+        $scope.todos = todoModel.todos;
         $scope.newTodo = '';
 
         // Monitor the current route for changes and adjust the filter accordingly.
-
         $scope.$on('$routeChangeSuccess', function () {
             var status = $scope.status = $routeParams.status || '';
 
@@ -32,26 +15,16 @@ angular.module('todomvc')
         });
 
         // live edit and undo features
-
         $scope.editedTodo = null;
 
         $scope.$watch('todos', function (newValue, oldValue) {
             $scope.remainingCount = $filter('filter')(todoModel.todos, { completed: false }).length;
             $scope.completedCount = todoModel.todos.length - $scope.remainingCount;
             $scope.allChecked = !$scope.remainingCount;
-            if (newValue !== oldValue) { // This prevents unneeded calls to the local storage
-                todoEntity.save(todoModel.todos);
-            }
+//            if (newValue !== oldValue) { // This prevents unneeded calls to the local storage
+//                todoModel.addTodo(todoModel.todos);
+//            }
         }, true);
-
-        $scope.doneEditing = function (todo) {
-            $scope.editedTodo = null;
-            todo.title = todo.title.trim();
-
-            if (!todo.title) {
-                $scope.removeTodo(todo);
-            }
-        };
 
         // undo features could also be in the DDD entity
 
@@ -69,20 +42,11 @@ angular.module('todomvc')
         };
 
         $scope.removeTodo = function (todo) {
-            todoModel.todos.splice(todoModel.todos.indexOf(todo), 1);
+            todoModel.deleteTodo(todo);
         };
 
         $scope.addTodo = function () {
-            var newTodo = $scope.newTodo.trim();
-            if (!newTodo.length) {
-                return;
-            }
-
-            todoModel.todos.push({
-                title: newTodo,
-                completed: false
-            });
-
+            todoModel.addTodo( $scope.newTodo );
             $scope.newTodo = '';
         };
 
@@ -90,6 +54,22 @@ angular.module('todomvc')
             $scope.editedTodo = todo;
             // Clone the original to restore it on demand.
             $scope.originalTodo = angular.extend({}, todo);
+        };
+
+        $scope.toggleTodoStatus = function (todo) {
+            todo.completed = !todo.completed;
+            todoModel.updateTodo( todo );
+        };
+
+        $scope.doneEditing = function (todo) {
+            $scope.editedTodo = null;
+            todo.title = todo.title.trim();
+
+            if (!todo.title) {
+                $scope.removeTodo(todo);
+            }
+
+            todoModel.updateTodo( todo );
         };
 
         $scope.clearCompletedTodos = function () {
