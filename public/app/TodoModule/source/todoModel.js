@@ -2,8 +2,23 @@ angular.module('todomvc')
     .service('todoModel', function (todoCollection) {
         'use strict';
 
-        var todos = todoCollection.query();
+        var todos = null;
 
+        /**
+         * Get initial Todo list
+         */
+        getAllTodos();
+
+        function getAllTodos() {
+            // Load initial state object
+            todos = todoCollection.query();
+        }
+
+        /**
+         * Add a new Todo
+         *
+         * @param title
+         */
         function addTodo(title) {
 
             if (!title.length) {
@@ -27,6 +42,11 @@ angular.module('todomvc')
             });
         }
 
+        /**
+         * Update a Todo
+         *
+         * @param todo
+         */
         function updateTodo(todo) {
             var todoToUpdate = {
                 "id": todo.id,
@@ -36,6 +56,11 @@ angular.module('todomvc')
             todoCollection.update(todoToUpdate);
         }
 
+        /**
+         * Delete a Todo
+         *
+         * @param todo
+         */
         function deleteTodo(todo) {
             var todoToDelete = {
                 "id": todo.id
@@ -46,6 +71,11 @@ angular.module('todomvc')
             todos.splice(todos.indexOf(todo), 1);
         }
 
+        /**
+         * Clear all completed Todo's from the list
+         *
+         * @returns {*}
+         */
         function clearCompletedTodos() {
             this.todos = this.todos.filter(function (val) {
 

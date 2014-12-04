@@ -2,10 +2,16 @@ angular.module('todomvc')
     .controller('TodoCtrl', function TodoCtrl($scope, $routeParams, $filter, todoModel) {
         'use strict';
 
+        /**
+         * Initialize controler variables
+         */
         $scope.todos = todoModel.todos;
         $scope.newTodo = '';
+        $scope.editedTodo = null;
 
-        // Monitor the current route for changes and adjust the filter accordingly.
+        /**
+         * Change the view/route to display Todo's accoring to their status
+         */
         $scope.$on('$routeChangeSuccess', function () {
             var status = $scope.status = $routeParams.status || '';
 
@@ -14,9 +20,9 @@ angular.module('todomvc')
             { completed: true } : null;
         });
 
-        // live edit and undo features
-        $scope.editedTodo = null;
-
+        /**
+         * Update active/completed counts on any todo change
+         */
         $scope.$watch('todos', function (newValue, oldValue) {
             $scope.remainingCount = $filter('filter')(todoModel.todos, { completed: false }).length;
             $scope.completedCount = todoModel.todos.length - $scope.remainingCount;
@@ -26,41 +32,68 @@ angular.module('todomvc')
 //            }
         }, true);
 
-        // undo features could also be in the DDD entity
-
+        /**
+         * Revert the last editet Todo
+         */
         $scope.revertEditing = function (todo) {
             todoModel.todos[todoModel.todos.indexOf(todo)] = $scope.originalTodo;
             $scope.doneEditing($scope.originalTodo);
         };
 
-        // prime candidates for DDD entity
-
+        /**
+         * Mark all the Todo's as completed
+         *
+         * @param completed
+         */
         $scope.markAll = function (completed) {
             todoModel.todos.forEach(function (todo) {
                 todo.completed = !completed;
             });
         };
 
+        /**
+         * Remove a Todo
+         *
+         * @param todo
+         */
         $scope.removeTodo = function (todo) {
             todoModel.deleteTodo(todo);
         };
 
+        /**
+         * Add a Todo
+         */
         $scope.addTodo = function () {
             todoModel.addTodo( $scope.newTodo );
             $scope.newTodo = '';
         };
 
+        /**
+         * Edit a todo
+         *
+         * @param todo
+         */
         $scope.editTodo = function (todo) {
             $scope.editedTodo = todo;
             // Clone the original to restore it on demand.
             $scope.originalTodo = angular.extend({}, todo);
         };
 
+        /**
+         * Toggle a Todo's status
+         *
+         * @param todo
+         */
         $scope.toggleTodoStatus = function (todo) {
             todo.completed = !todo.completed;
             todoModel.updateTodo( todo );
         };
 
+        /**
+         * Update the Todo after editing its value
+         *
+         * @param todo
+         */
         $scope.doneEditing = function (todo) {
             $scope.editedTodo = null;
             todo.title = todo.title.trim();
@@ -72,6 +105,9 @@ angular.module('todomvc')
             todoModel.updateTodo( todo );
         };
 
+        /**
+         * Clear the list of all completed Todo's
+         */
         $scope.clearCompletedTodos = function () {
             $scope.todos = todoModel.clearCompletedTodos();
         };
