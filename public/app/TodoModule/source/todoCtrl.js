@@ -9,12 +9,37 @@ angular.module('todomvc')
         $scope.refresh = function(){
             console.log(todoModel.getTodosFromRest());
             console.log(todoModel.getTodosFromIndexedDB());
+
+
             var todo = todoCollection.get({ id: 1 }, function() {
                 console.log(todo);
             });
+
             var todos = todoCollection.query(function() {
                 console.log(todos);
             });
+
+            var newTodo = {
+                "id": null,
+                "title": "test",
+                "completed": false
+            };
+
+            todoCollection.save(newTodo);
+
+            var deleteTodo = {
+                "id": 2
+            };
+
+            todoCollection.delete(deleteTodo);
+
+            var updateTodo = {
+                "id": 3,
+                "title": "test has now been updated",
+                "completed": true
+            };
+
+            todoCollection.update(updateTodo);
         };
 
         $scope.$on('todoModel::gotTodosFromRestEvent', function(event) {
