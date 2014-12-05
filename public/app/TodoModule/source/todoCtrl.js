@@ -33,7 +33,7 @@ angular.module('todomvc')
         }, true);
 
         /**
-         * Revert the last editet Todo
+         * Revert the last edited Todo
          */
         $scope.revertEditing = function (todo) {
             todoModel.todos[todoModel.todos.indexOf(todo)] = $scope.originalTodo;
@@ -48,6 +48,7 @@ angular.module('todomvc')
         $scope.markAll = function (completed) {
             todoModel.todos.forEach(function (todo) {
                 todo.completed = !completed;
+                todoModel.updateTodo( todo );
             });
         };
 
