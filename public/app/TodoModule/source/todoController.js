@@ -1,11 +1,11 @@
 angular.module('todomvc')
-    .controller('TodoController', function TodoController($scope, $routeParams, $filter, TodoCollection) {
+    .controller('TodoController', function TodoController($scope, $routeParams, $filter, TodoModel) {
         'use strict';
 
         /**
          * Initialize controler variables
          */
-        $scope.todos = TodoCollection.todos;
+        $scope.todos = TodoModel.todos;
         $scope.newTodo = '';
         $scope.editedTodo = null;
 
@@ -24,19 +24,16 @@ angular.module('todomvc')
          * Update active/completed counts on any todo change
          */
         $scope.$watch('todos', function (newValue, oldValue) {
-            $scope.remainingCount = $filter('filter')(TodoCollection.todos, { completed: false }).length;
-            $scope.completedCount = TodoCollection.todos.length - $scope.remainingCount;
-            $scope.allChecked = !$scope.remainingCount;
-//            if (newValue !== oldValue) { // This prevents unneeded calls to the local storage
-//                TodoCollection.addTodo(TodoCollection.todos);
-//            }
+            $scope.remainingCount = $filter('filter')(TodoModel.todos, { completed: false }).length;
+            $scope.completedCount = TodoModel.todos.length - $scope.remainingCount;
+            $scope.allChecked = !$scope.remainingCount;//
         }, true);
 
         /**
          * Revert the last edited Todo
          */
         $scope.revertEditing = function (todo) {
-            TodoCollection.todos[TodoCollection.todos.indexOf(todo)] = $scope.originalTodo;
+            TodoModel.todos[TodoModel.todos.indexOf(todo)] = $scope.originalTodo;
             $scope.doneEditing($scope.originalTodo);
         };
 
@@ -45,15 +42,9 @@ angular.module('todomvc')
          *
          * @param completed
          */
-        $scope.markAll = function (completed) {
-            TodoCollection.todos.forEach(function (todo) {
-                todo.completed = !completed;
-                TodoCollection.updateTodo( todo );
-
-                console.log(todo);
-
-            });
-        };
+        $scope.markAll = function( completed) {
+            TodoModel.markAll( completed );
+        }
 
         /**
          * Remove a Todo
@@ -61,14 +52,14 @@ angular.module('todomvc')
          * @param todo
          */
         $scope.removeTodo = function (todo) {
-            TodoCollection.deleteTodo(todo);
+            TodoModel.deleteTodo(todo);
         };
 
         /**
          * Add a Todo
          */
         $scope.addTodo = function () {
-            TodoCollection.addTodo( $scope.newTodo );
+            TodoModel.addTodo( $scope.newTodo );
             $scope.newTodo = '';
         };
 
@@ -90,7 +81,7 @@ angular.module('todomvc')
          */
         $scope.toggleTodoStatus = function (todo) {
             todo.completed = !todo.completed;
-            TodoCollection.updateTodo( todo );
+            TodoModel.updateTodo( todo );
         };
 
         /**
@@ -106,14 +97,14 @@ angular.module('todomvc')
                 $scope.removeTodo(todo);
             }
 
-            TodoCollection.updateTodo( todo );
+            TodoModel.updateTodo( todo );
         };
 
         /**
          * Clear the list of all completed Todo's
          */
         $scope.clearCompletedTodos = function () {
-            $scope.todos = TodoCollection.clearCompletedTodos();
+            $scope.todos = TodoModel.clearCompletedTodos();
         };
 
     });
