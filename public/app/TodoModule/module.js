@@ -8,10 +8,10 @@ angular.module('todomvc', ['ngRoute', 'ngResource'])
         'use strict';
 
         $routeProvider.when('/', {
-            controller: 'TodoCtrl',
+            controller: 'TodoController',
             templateUrl: 'app/TodoModule/source/todo-index.html'
         }).when('/:status', {
-            controller: 'TodoCtrl',
+            controller: 'TodoController',
             templateUrl: 'app/TodoModule/source/todo-index.html'
         }).otherwise({
             redirectTo: '/'

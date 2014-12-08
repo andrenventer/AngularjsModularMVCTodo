@@ -47,7 +47,7 @@
 
         beforeEach(inject(function ($controller, $rootScope, $httpBackend) {
             scope = $rootScope.$new();
-            ctrl = $controller('TodoCtrl', { $scope: scope });
+            ctrl = $controller('TodoController', { $scope: scope });
             $httpBackend.when('GET', 'http://localhost:3000/todos').respond(postsFromRestAPI);
             $httpBackend.when('GET', 'http://localhost:3000/todos/3').respond(postFromRestAPI);
         }));
@@ -75,7 +75,7 @@
 
             describe('being at /active', function () {
                 it('should filter non-completed', inject(function ($controller) {
-                    ctrl = $controller('TodoCtrl', {
+                    ctrl = $controller('TodoController', {
                         $scope: scope,
                         $routeParams: {
                             status: 'active'
@@ -89,7 +89,7 @@
 
             describe('being at /completed', function () {
                 it('should filter completed', inject(function ($controller) {
-                    ctrl = $controller('TodoCtrl', {
+                    ctrl = $controller('TodoController', {
                         $scope: scope,
                         $routeParams: {
                             status: 'completed'
@@ -107,7 +107,7 @@
 
             beforeEach(inject(function ($controller) {
                 todoEntity.storage = [];
-                ctrl = $controller('TodoCtrl', {
+                ctrl = $controller('TodoController', {
                     $scope: scope,
                     todoEntity: todoEntity
                 });
@@ -166,7 +166,7 @@
                 ];
 
                 todoEntity.storage = todoList;
-                ctrl = $controller('TodoCtrl', {
+                ctrl = $controller('TodoController', {
                     $scope: scope,
                     todoEntity: todoEntity
                 });

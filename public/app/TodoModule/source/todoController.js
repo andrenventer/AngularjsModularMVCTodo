@@ -1,11 +1,11 @@
 angular.module('todomvc')
-    .controller('TodoCtrl', function TodoCtrl($scope, $routeParams, $filter, todoModel) {
+    .controller('TodoController', function TodoController($scope, $routeParams, $filter, TodoCollection) {
         'use strict';
 
         /**
          * Initialize controler variables
          */
-        $scope.todos = todoModel.todos;
+        $scope.todos = TodoCollection.todos;
         $scope.newTodo = '';
         $scope.editedTodo = null;
 
@@ -24,11 +24,11 @@ angular.module('todomvc')
          * Update active/completed counts on any todo change
          */
         $scope.$watch('todos', function (newValue, oldValue) {
-            $scope.remainingCount = $filter('filter')(todoModel.todos, { completed: false }).length;
-            $scope.completedCount = todoModel.todos.length - $scope.remainingCount;
+            $scope.remainingCount = $filter('filter')(TodoCollection.todos, { completed: false }).length;
+            $scope.completedCount = TodoCollection.todos.length - $scope.remainingCount;
             $scope.allChecked = !$scope.remainingCount;
 //            if (newValue !== oldValue) { // This prevents unneeded calls to the local storage
-//                todoModel.addTodo(todoModel.todos);
+//                TodoCollection.addTodo(TodoCollection.todos);
 //            }
         }, true);
 
@@ -36,7 +36,7 @@ angular.module('todomvc')
          * Revert the last edited Todo
          */
         $scope.revertEditing = function (todo) {
-            todoModel.todos[todoModel.todos.indexOf(todo)] = $scope.originalTodo;
+            TodoCollection.todos[TodoCollection.todos.indexOf(todo)] = $scope.originalTodo;
             $scope.doneEditing($scope.originalTodo);
         };
 
@@ -46,9 +46,9 @@ angular.module('todomvc')
          * @param completed
          */
         $scope.markAll = function (completed) {
-            todoModel.todos.forEach(function (todo) {
+            TodoCollection.todos.forEach(function (todo) {
                 todo.completed = !completed;
-                todoModel.updateTodo( todo );
+                TodoCollection.updateTodo( todo );
             });
         };
 
@@ -58,14 +58,14 @@ angular.module('todomvc')
          * @param todo
          */
         $scope.removeTodo = function (todo) {
-            todoModel.deleteTodo(todo);
+            TodoCollection.deleteTodo(todo);
         };
 
         /**
          * Add a Todo
          */
         $scope.addTodo = function () {
-            todoModel.addTodo( $scope.newTodo );
+            TodoCollection.addTodo( $scope.newTodo );
             $scope.newTodo = '';
         };
 
@@ -87,7 +87,7 @@ angular.module('todomvc')
          */
         $scope.toggleTodoStatus = function (todo) {
             todo.completed = !todo.completed;
-            todoModel.updateTodo( todo );
+            TodoCollection.updateTodo( todo );
         };
 
         /**
@@ -103,14 +103,14 @@ angular.module('todomvc')
                 $scope.removeTodo(todo);
             }
 
-            todoModel.updateTodo( todo );
+            TodoCollection.updateTodo( todo );
         };
 
         /**
          * Clear the list of all completed Todo's
          */
         $scope.clearCompletedTodos = function () {
-            $scope.todos = todoModel.clearCompletedTodos();
+            $scope.todos = TodoCollection.clearCompletedTodos();
         };
 
     });
