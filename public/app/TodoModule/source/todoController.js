@@ -49,6 +49,9 @@ angular.module('todomvc')
             TodoCollection.todos.forEach(function (todo) {
                 todo.completed = !completed;
                 TodoCollection.updateTodo( todo );
+
+                console.log(todo);
+
             });
         };
 

@@ -33,13 +33,10 @@ angular.module('todomvc')
                 "completed": false
             };
 
-            TodoAPIService.save(todoToAdd);
+            var savedTodo = TodoAPIService.save(todoToAdd);
 
             // Add to state object
-            todos.push({
-                title: title,
-                completed: false
-            });
+            todos.push(savedTodo);
         }
 
         /**
@@ -53,7 +50,11 @@ angular.module('todomvc')
                 "title": todo.title,
                 "completed": todo.completed
             };
-            TodoAPIService.update(todoToUpdate);
+
+            var updatedTodo = TodoAPIService.update(todoToUpdate);
+
+            // Update state object
+            todos[todos.indexOf(todo)] = updatedTodo;
         }
 
         /**
@@ -65,6 +66,7 @@ angular.module('todomvc')
             var todoToDelete = {
                 "id": todo.id
             };
+
             TodoAPIService.delete(todoToDelete);
 
             // Remove from state object
@@ -77,14 +79,16 @@ angular.module('todomvc')
          * @returns {*}
          */
         function clearCompletedTodos() {
-            this.todos = this.todos.filter(function (val) {
 
-                if(val.completed)
-                    TodoAPIService.delete(val);
+            for(var i = 0; i < todos.length; i++) {
 
-                return !val.completed;
-            });
-            return this.todos;
+                if(todos[i].completed) {
+                    deleteTodo(todos[i]);
+                    i--;
+                }
+            }
+
+            return todos;
         }
 
         return {
