@@ -27,6 +27,7 @@ angular.module('todomvc')
                 "title": title,
                 "completed": false
             };
+
            return TodoAPIService.create(todoToAdd);
         }
 
