@@ -2,7 +2,6 @@
     <title>AngularJS • TodoMVC</title>
     <link rel="stylesheet" href="app/TodoModule/assets/todo.css">
 </head>
-
 <section id="todomodule">
     <header id="header">
         <h1>todos</h1>
@@ -27,9 +26,9 @@
         </ul>
     </section>
     <footer id="footer" ng-show="todos.length" ng-cloak>
-					<span id="todo-count"><strong>{{remainingCount}}</strong>
-						<ng-pluralize count="remainingCount" when="{ one: 'item left', other: 'items left' }"></ng-pluralize>
-					</span>
+        <span id="todo-count"><strong>{{remainingCount}}</strong>
+            <ng-pluralize count="remainingCount" when="{ one: 'item left', other: 'items left' }"></ng-pluralize>
+        </span>
         <ul id="filters">
             <li>
                 <a ng-class="{selected: status == ''} " href="#/">All</a>

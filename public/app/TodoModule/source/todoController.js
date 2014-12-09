@@ -3,14 +3,16 @@ angular.module('todomvc')
         'use strict';
 
         /**
-         * Initialize controler variables
+         * Initialize controller variables
          */
         $scope.todos = TodoModel.todos;
+        $scope.activeTodos = TodoModel.activeTodos;
+
         $scope.newTodo = '';
         $scope.editedTodo = null;
 
         /**
-         * Change the view/route to display Todo's accoring to their status
+         * Change the view/route to display Todo's according to their status
          */
         $scope.$on('$routeChangeSuccess', function () {
             var status = $scope.status = $routeParams.status || '';

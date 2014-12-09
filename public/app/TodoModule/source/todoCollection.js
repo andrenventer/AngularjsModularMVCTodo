@@ -1,12 +1,12 @@
 angular.module('todomvc')
-    .service('TodoCollection', function (TodoAPIService) {
+    .service('TodoCollection', function (TodoAPIFactory) {
         'use strict';
 
         /**
          * Get Todos
          */
         function getTodos() {
-            return TodoAPIService.query();
+            return TodoAPIFactory.query();
         }
 
         /**
@@ -27,8 +27,7 @@ angular.module('todomvc')
                 "title": title,
                 "completed": false
             };
-
-           return TodoAPIService.save(todoToAdd);
+           return TodoAPIFactory.save(todoToAdd);
         }
 
         /**
@@ -43,7 +42,7 @@ angular.module('todomvc')
                 "completed": todo.completed
             };
 
-            return TodoAPIService.update(todoToUpdate);
+            return TodoAPIFactory.update(todoToUpdate);
         }
 
         /**
@@ -56,7 +55,7 @@ angular.module('todomvc')
                 "id": todo.id
             };
 
-            TodoAPIService.delete(todoToDelete);
+            TodoAPIFactory.delete(todoToDelete);
         }
 
         return {
@@ -67,4 +66,3 @@ angular.module('todomvc')
         }
 
     });
-
