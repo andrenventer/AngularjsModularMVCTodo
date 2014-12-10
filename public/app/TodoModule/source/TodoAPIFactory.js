@@ -1,5 +1,5 @@
 angular.module('todomvc')
-    .service('TodoAPIService', function ($resource) {
+    .factory('TodoAPIFactory', function ($resource) {
         return $resource('http://localhost:3000/todos/:id', {
                 id: '@id'
             }, {
