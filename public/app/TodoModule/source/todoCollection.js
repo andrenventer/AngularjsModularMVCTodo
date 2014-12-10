@@ -1,5 +1,5 @@
 angular.module('todomvc')
-    .service('TodoCollection', function (TodoAPIFactory) {
+    .factory('TodoCollection', function (TodoAPIFactory) {
         'use strict';
 
         /**
