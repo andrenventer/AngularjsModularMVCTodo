@@ -7,14 +7,17 @@ angular.module('todomvc')
                     method: 'POST'
                 },
                 read: {
-                    method: 'GET',
-                    isArray: true
+                    method: 'GET'
                 },
                 update: {
                     method: 'PUT'
                 },
                 delete: {
                     method: 'DELETE'
+                },
+                list: {
+                    method: 'GET',
+                    isArray: true
                 }
             }
         )

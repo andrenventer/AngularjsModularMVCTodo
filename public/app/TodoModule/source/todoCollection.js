@@ -6,7 +6,7 @@ angular.module('todomvc')
          * Get Todos
          */
         function getTodos() {
-            return TodoAPIService.read();
+            return TodoAPIService.list();
         }
 
         /**
