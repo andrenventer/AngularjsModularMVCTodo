@@ -1,12 +1,21 @@
 angular.module('todomvc')
-    .service('TodoCollection', function (TodoAPIFactory) {
+    .factory('TodoCollectionFactory', function (TodoAPIFactory) {
         'use strict';
 
         /**
          * Get Todos
          */
-        function getTodos() {
+
+        function getAllTodos() {
             return TodoAPIFactory.list();
+        }
+
+        function getActiveTodos() {
+            return TodoAPIFactory.list( {completed:false} );
+        }
+
+        function getCompletedTodos() {
+            return TodoAPIFactory.list( {completed:true} );
         }
 
         /**
@@ -60,7 +69,9 @@ angular.module('todomvc')
         }
 
         return {
-            getTodos: getTodos,
+            getAllTodos: getAllTodos,
+            getActiveTodos: getActiveTodos,
+            getCompletedTodos: getCompletedTodos,
             addTodo: addTodo,
             updateTodo: updateTodo,
             deleteTodo: deleteTodo

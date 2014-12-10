@@ -14,11 +14,21 @@ server.low.db = {
         },
         {
             id: 2,
+            title: "Jump",
+            completed: true
+        },
+        {
+            id: 3,
+            title: "Wave",
+            completed: true
+        },
+        {
+            id: 4,
             title: "Rave",
             completed: false
         },
         {
-            id: 3,
+            id: 5,
             title: "Repeat",
             completed: false
         }

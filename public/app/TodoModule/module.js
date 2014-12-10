@@ -10,9 +10,9 @@ angular.module('todomvc', ['ngRoute', 'ngResource'])
         $routeProvider.when('/', {
             controller: 'TodoController',
             templateUrl: 'app/TodoModule/source/todo-index.html'
-        }).when('/:status', {
-            controller: 'TodoController',
-            templateUrl: 'app/TodoModule/source/todo-index.html'
+//        }).when('/:status', {
+//            controller: 'TodoController',
+//            templateUrl: 'app/TodoModule/source/todo-index.html'
         }).otherwise({
             redirectTo: '/'
         });

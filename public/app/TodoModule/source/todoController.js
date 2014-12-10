@@ -1,43 +1,22 @@
 angular.module('todomvc')
-    .controller('TodoController', function TodoController($scope, $routeParams, $filter, TodoModel) {
+    .controller('TodoController', function TodoController($scope, $routeParams, $filter, TodoModelFactory) {
         'use strict';
 
         /**
          * Initialize controller variables
          */
-        $scope.todos = TodoModel.todos;
-        $scope.activeTodos = TodoModel.activeTodos;
-
+        $scope.todos = TodoModelFactory.getAllTodos();
         $scope.newTodo = '';
         $scope.editedTodo = null;
-
-        /**
-         * Change the view/route to display Todo's according to their status
-         */
-        $scope.$on('$routeChangeSuccess', function () {
-            var status = $scope.status = $routeParams.status || '';
-
-            $scope.statusFilter = (status === 'active') ?
-            { completed: false } : (status === 'completed') ?
-            { completed: true } : null;
-        });
 
         /**
          * Update active/completed counts on any todo change
          */
         $scope.$watch('todos', function (newValue, oldValue) {
-            $scope.remainingCount = $filter('filter')(TodoModel.todos, { completed: false }).length;
-            $scope.completedCount = TodoModel.todos.length - $scope.remainingCount;
-            $scope.allChecked = !$scope.remainingCount;//
+            $scope.remainingCount = TodoModelFactory.calculateRemainingTodos();
+            $scope.completedCount = TodoModelFactory.calculateCompletedTodos();
+            $scope.allChecked = TodoModelFactory.getAllChecked();
         }, true);
-
-        /**
-         * Revert the last edited Todo
-         */
-        $scope.revertEditing = function (todo) {
-            TodoModel.todos[TodoModel.todos.indexOf(todo)] = $scope.originalTodo;
-            $scope.doneEditing($scope.originalTodo);
-        };
 
         /**
          * Mark all the Todo's as completed
@@ -45,7 +24,7 @@ angular.module('todomvc')
          * @param completed
          */
         $scope.markAll = function( completed) {
-            TodoModel.markAll( completed );
+            TodoModelFactory.markAll( completed );
         }
 
         /**
@@ -54,14 +33,14 @@ angular.module('todomvc')
          * @param todo
          */
         $scope.removeTodo = function (todo) {
-            TodoModel.deleteTodo(todo);
+            $scope.todos = TodoModelFactory.deleteTodo(todo);
         };
 
         /**
          * Add a Todo
          */
         $scope.addTodo = function () {
-            TodoModel.addTodo( $scope.newTodo );
+            $scope.todos = TodoModelFactory.addTodo( $scope.newTodo );
             $scope.newTodo = '';
         };
 
@@ -83,7 +62,7 @@ angular.module('todomvc')
          */
         $scope.toggleTodoStatus = function (todo) {
             todo.completed = !todo.completed;
-            TodoModel.updateTodo( todo );
+            TodoModelFactory.updateTodo( todo );
         };
 
         /**
@@ -99,14 +78,35 @@ angular.module('todomvc')
                 $scope.removeTodo(todo);
             }
 
-            TodoModel.updateTodo( todo );
+            TodoModelFactory.updateTodo( todo );
         };
 
         /**
          * Clear the list of all completed Todo's
          */
         $scope.clearCompletedTodos = function () {
-            $scope.todos = TodoModel.clearCompletedTodos();
+            $scope.todos = TodoModelFactory.clearCompletedTodos();
+        };
+
+        /**
+         * Show all todos
+         */
+        $scope.showAllTodos = function() {
+            $scope.todos = TodoModelFactory.getAllTodos();
+        };
+
+        /**
+         * Show active todos
+         */
+        $scope.showActiveTodos = function() {
+            $scope.todos = TodoModelFactory.getActiveTodos();
+        };
+
+        /**
+         * Show completed todos
+         */
+        $scope.showCompletedTodos = function() {
+            $scope.todos = TodoModelFactory.getCompletedTodos();
         };
 
     });
